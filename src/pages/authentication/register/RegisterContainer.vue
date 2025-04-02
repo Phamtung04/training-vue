@@ -24,11 +24,28 @@
 import { useForm } from 'vee-validate'
 import Register from './Register.vue'
 import { validationSchema } from './config'
+import { useMutation } from '@tanstack/vue-query'
+import { authService } from '../../../config/apiService/authService'
+import { useRouter } from 'vue-router'
 
 const { handleSubmit } = useForm({
   validationSchema,
 })
+const router = useRouter()
+
+const mutation = useMutation({
+  mutationFn: authService.register,
+  onSuccess: () => {
+    router.push('/login')
+    console.log('success')
+  },
+  onError: (error) => {
+    console.log('error', error)
+  },
+})
+
 const onSubmit = handleSubmit((data) => {
+  mutation.mutate(data)
   console.log(data)
 })
 </script>

@@ -4,8 +4,8 @@
       v-model="field"
       :items="props.item"
       :label="props.label"
-      item-title="state"
-      item-value="abbr"
+      item-title="label"
+      item-value="value"
       :error-messages="errorMessage"
     ></v-select>
   </v-responsive>

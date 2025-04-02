@@ -1,27 +1,16 @@
 <script setup lang="ts">
 import CustomSelectField from '../../../components/textField/CustomSelectField.vue'
 import CustomTextField from '../../../components/textField/CustomTextField.vue'
+import { GENDER, ROLE } from '../../../constants/enum'
 
 const optionRole = [
-  {
-    state: 'user',
-    abbr: '1',
-  },
-  {
-    state: 'Admin',
-    abbr: '2',
-  },
+  { label: 'Admin', value: ROLE.ADMIN },
+  { label: 'User', value: ROLE.USER },
 ]
 
 const optionGender = [
-  {
-    state: 'male',
-    abbr: '1',
-  },
-  {
-    state: 'female',
-    abbr: '2',
-  },
+  { label: 'Male', value: GENDER.MALE },
+  { label: 'Female', value: GENDER.FEMALE },
 ]
 </script>
 
