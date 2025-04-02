@@ -93,4 +93,16 @@ input:-webkit-autofill:focus {
   scrollbar-width: none; /* Ẩn trên Firefox */
 }
 
+tbody {
+  display: block;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+thead,
+tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
 @import 'tailwindcss';

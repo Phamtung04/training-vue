@@ -8,6 +8,7 @@ import * as directives from 'vuetify/directives'
 import router from './routers/router'
 import { QueryClient } from './../node_modules/@tanstack/vue-query/src/queryClient'
 import { VueQueryPlugin } from '@tanstack/vue-query'
+import '@mdi/font/css/materialdesignicons.css'
 
 const vuetify = createVuetify({
   components,

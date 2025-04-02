@@ -21,20 +21,44 @@ import { useForm } from 'vee-validate'
 import PasswordCode from './PasswordCode.vue'
 import { passwordCodeSchema } from './config'
 import { useRouter } from 'vue-router'
+import { useMutation } from '@tanstack/vue-query'
+import { authService } from '../../../config/apiService/authService'
 
 const router = useRouter()
 
-const { handleSubmit } = useForm({
+const { handleSubmit, setFieldError } = useForm({
   validationSchema: passwordCodeSchema,
 })
 
-const onSubmit = handleSubmit((values) => {
-  console.log(values)
+const mutate = useMutation({
+  mutationFn: authService.confirmForgotPassword,
+  onSuccess: (dataConfirm) => {
+    router.push('/login')
+    localStorage.removeItem('training_vue_token_email')
+    console.log('success', dataConfirm)
+  },
+  onError: (error: any) => {
+    const errorMessages = error?.validationErrors || {}
+    console.log('error', errorMessages)
+
+    errorMessages.forEach(
+      ({ field, message }: { field: string; message: string }) => {
+        setFieldError(field, message)
+      }
+    )
+    console.log('error', error)
+  },
 })
 
 const onSubmitCancel = () => {
   router.push('/login')
 }
+
+const onSubmit = handleSubmit((data) => {
+  const email = localStorage.getItem('training_vue_token_email')
+  const requestBody = { email, ...data }
+  mutate.mutate(requestBody)
+})
 </script>
 
 <style scoped></style>

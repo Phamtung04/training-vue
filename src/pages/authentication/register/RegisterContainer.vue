@@ -28,7 +28,7 @@ import { useMutation } from '@tanstack/vue-query'
 import { authService } from '../../../config/apiService/authService'
 import { useRouter } from 'vue-router'
 
-const { handleSubmit } = useForm({
+const { handleSubmit, setFieldError } = useForm({
   validationSchema,
 })
 const router = useRouter()
@@ -39,8 +39,15 @@ const mutation = useMutation({
     router.push('/login')
     console.log('success')
   },
-  onError: (error) => {
+  onError: (error: any) => {
+    const errorMessages = error?.validationErrors || {}
     console.log('error', error)
+
+    errorMessages.forEach(
+      ({ field, message }: { field: string; message: string }) => {
+        setFieldError(field, message)
+      }
+    )
   },
 })
 

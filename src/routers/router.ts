@@ -4,6 +4,10 @@ import RegisterContainer from '../pages/authentication/register/RegisterContaine
 import LoginContainer from '../pages/authentication/login/LoginContainer.vue'
 import ForgotPasswordContainer from '../pages/authentication/forgotPassword/ForgotPasswordContainer.vue'
 import PasswordCodeContainer from '../pages/authentication/passwordCode/PasswordCodeContainer.vue'
+import Layout from '../layout/admin/layout.vue'
+import ListUser from '../pages/user/listUser/ListUser.vue'
+import Order from '../pages/order/Order.vue'
+import ListUserContainer from '../pages/user/listUser/ListUserContainer.vue'
 
 const routes = [
   {
@@ -12,7 +16,6 @@ const routes = [
     children: [
       {
         path: '',
-        // name: 'login',
         component: LoginContainer,
       },
       {
@@ -34,6 +37,22 @@ const routes = [
         path: 'password-code',
         name: 'password-code',
         component: PasswordCodeContainer,
+      },
+    ],
+  },
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: 'user',
+        name: 'user',
+        component: ListUserContainer,
+      },
+      {
+        path: 'order',
+        name: 'order',
+        component: Order,
       },
     ],
   },

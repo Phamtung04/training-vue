@@ -19,6 +19,7 @@ const props = defineProps({
     type: String,
     default: 'text',
   },
+  errorMessage: String,
 })
 
 const { value: field, errorMessage } = useField(() => props.name!)

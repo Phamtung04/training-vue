@@ -27,6 +27,7 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
+    "@mdi/font": "^7.4.47",
     "@vitejs/plugin-vue": "^5.2.1",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.23.0",

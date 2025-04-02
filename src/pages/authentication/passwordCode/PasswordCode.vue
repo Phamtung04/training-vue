@@ -2,7 +2,7 @@
   <div class="mt-5">
     <CustomTextField
       class="mb-3"
-      name="passCode"
+      name="passwordCode"
       label="Password code"
       type="text"
     />
