@@ -37,8 +37,11 @@ const router = useRouter()
 const mutate = useMutation({
   mutationFn: authService.login,
   onSuccess: (dataAuth) => {
-    // router.push('/')
-    // localStorage.setItem('token', dataAuth.data.data.accessToken)
+    router.push('/user')
+    localStorage.setItem(
+      'training_vue_token_access',
+      dataAuth.data.data.accessToken
+    )
     console.log('success', dataAuth)
   },
   onError: (error: any) => {

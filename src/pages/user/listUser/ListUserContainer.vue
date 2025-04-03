@@ -1,78 +1,36 @@
 <template>
-  <table
-    class="mx-auto [border-spacing:0_8px] [border-collapse:separate] mt-10"
-  >
-    <thead>
-      <tr class="h-15">
-        <th
-          v-for="(header, index) in headers"
-          :key="index"
-          class="w-40 text-center"
-        >
-          {{ header.value }}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="(user, index) in displayedUsers"
-        :key="index"
-        class="mt-5 rounded-2xl text-center hover:shadow-[0_2px_15px_3px_rgba(0,0,0,0.07),0_10px_20px_2px_rgba(0,0,0,0.04)] h-15"
-      >
-        <td>{{ user.Username }}</td>
-        <td>{{ user.Fullname }}</td>
-        <td>{{ user.Birthday }}</td>
-        <td>{{ user.Email }}</td>
-        <td>{{ user.Role }}</td>
-        <td>{{ user.Other }}</td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="flex justify-end items-center mb-3">
-    <div>
-      <label for="itemsPerPage"> Số lượng hiển thị:</label>
-      <select
-        id="itemsPerPage"
-        v-model="itemsPerPage"
-        class="ml-2 p-1 border rounded w-10"
-        @change="updatePage(1)"
-      >
-        <option v-for="option in perPageOptions" :key="option" :value="option">
-          {{ option }}
-        </option>
-      </select>
-    </div>
-    <div>
-      Hiển thị {{ startItem }} - {{ endItem }} trên tổng số
-      {{ totalItems }} người dùng
-    </div>
-    <div class="flex items-center gap-4">
-      <button
-        @click="prevPage"
-        :disabled="currentPage === 1"
-        class="px-3 py-2 bg-gray-300 rounded disabled:opacity-50"
-      >
-        <
-      </button>
-
-      <span>Trang {{ currentPage }} / {{ totalPages }}</span>
-
-      <button
-        @click="nextPage"
-        :disabled="currentPage === totalPages"
-        class="px-3 py-2 bg-gray-300 rounded disabled:opacity-50"
-      >
-        >
-      </button>
-    </div>
-  </div>
+  <ListUser
+    :headers="headers"
+    :displayedUsers="displayedUsers"
+    :itemsPerPage="itemsPerPage"
+    :perPageOptions="perPageOptions"
+    :currentPage="currentPage"
+    :totalItems="totalItems"
+    :totalPages="totalPages"
+    :startItem="startItem"
+    :endItem="endItem"
+    :option="option"
+    :handleUpdate="handleUpdate"
+    :handleDelete="handleDelete"
+    :sortBy="sortBy"
+    :sortDirection="sortDirection"
+    @update-page="updatePage"
+    @prev-page="prevPage"
+    @next-page="nextPage"
+    @update-items-per-page="handleUpdateItemsPerPage"
+    @sort="handleSort"
+  />
 </template>
-
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
+import ListUser from './ListUser.vue'
+
+const sortBy = ref<string>('')
+const sortDirection = ref<'asc' | 'desc'>('asc')
 
 const users = ref([
   {
+    id: '8172711',
     Username: 'john_doe',
     Fullname: 'John Doe',
     Birthday: '1990-05-15',
@@ -81,6 +39,7 @@ const users = ref([
     Other: 'N/A',
   },
   {
+    id: '8172712',
     Username: 'jane_smith',
     Fullname: 'Jane Smith',
     Birthday: '1992-07-20',
@@ -89,6 +48,7 @@ const users = ref([
     Other: 'N/A',
   },
   {
+    id: '8172713',
     Username: 'alice_jones',
     Fullname: 'Alice Jones',
     Birthday: '1988-11-30',
@@ -97,6 +57,7 @@ const users = ref([
     Other: 'N/A',
   },
   {
+    id: '8172714',
     Username: 'bob_brown',
     Fullname: 'Bob Brown',
     Birthday: '1995-02-25',
@@ -105,6 +66,7 @@ const users = ref([
     Other: 'N/A',
   },
   {
+    id: '8172715',
     Username: 'charlie_clark',
     Fullname: 'Charlie Clark',
     Birthday: '1993-09-10',
@@ -113,6 +75,7 @@ const users = ref([
     Other: 'N/A',
   },
   {
+    id: '8172716',
     Username: 'david_white',
     Fullname: 'David White',
     Birthday: '1991-12-05',
@@ -121,6 +84,7 @@ const users = ref([
     Other: 'N/A',
   },
   {
+    id: '8172717',
     Username: 'emily_davis',
     Fullname: 'Emily Davis',
     Birthday: '1998-06-18',
@@ -129,6 +93,34 @@ const users = ref([
     Other: 'N/A',
   },
   {
+    id: '8172718',
+    Username: 'frank_miller',
+    Fullname: 'Frank Miller',
+    Birthday: '1987-04-12',
+    Email: 'frank@example.com',
+    Role: 'User',
+    Other: 'N/A',
+  },
+  {
+    id: '8172719',
+    Username: 'david_white',
+    Fullname: 'David White',
+    Birthday: '1991-12-05',
+    Email: 'david@example.com',
+    Role: 'User',
+    Other: 'N/A',
+  },
+  {
+    id: '8172720',
+    Username: 'emily_davis',
+    Fullname: 'Emily Davis',
+    Birthday: '1998-06-18',
+    Email: 'emily@example.com',
+    Role: 'Moderator',
+    Other: 'N/A',
+  },
+  {
+    id: '8172721',
     Username: 'frank_miller',
     Fullname: 'Frank Miller',
     Birthday: '1987-04-12',
@@ -139,17 +131,17 @@ const users = ref([
 ])
 
 const headers = ref([
-  { value: 'Username' },
-  { value: 'Fullname' },
-  { value: 'Birthday' },
-  { value: 'Email' },
-  { value: 'Role' },
-  { value: 'Other' },
+  { value: 'Username', sortable: true },
+  { value: 'Fullname', sortable: true },
+  { value: 'Birthday', sortable: true },
+  { value: 'Email', sortable: true },
+  { value: 'Role', sortable: false },
+  { value: 'Other', sortable: false },
 ])
-
-const itemsPerPage = ref(3) // Số lượng item trên mỗi trang
+const option = 1
+const itemsPerPage = ref(3)
 const perPageOptions = ref([3, 5, 10, 15])
-const currentPage = ref(1) // Trang hiện tại
+const currentPage = ref(1)
 
 const totalItems = computed(() => users.value.length)
 const totalPages = computed(() =>
@@ -157,9 +149,32 @@ const totalPages = computed(() =>
 )
 
 const displayedUsers = computed(() => {
+  let sortedUsers = [...users.value]
+
+  if (sortBy.value) {
+    sortedUsers.sort((a, b) => {
+      const fieldA = a[sortBy.value]
+      const fieldB = b[sortBy.value]
+
+      if (sortBy.value === 'Birthday') {
+        const dateA = new Date(fieldA)
+        const dateB = new Date(fieldB)
+        return sortDirection.value === 'asc'
+          ? dateA.getTime() - dateB.getTime()
+          : dateB.getTime() - dateA.getTime()
+      }
+
+      if (sortDirection.value === 'asc') {
+        return fieldA.localeCompare(fieldB)
+      } else {
+        return fieldB.localeCompare(fieldA)
+      }
+    })
+  }
+
   const start = (currentPage.value - 1) * itemsPerPage.value
   const end = start + itemsPerPage.value
-  return users.value.slice(start, end)
+  return sortedUsers.slice(start, end)
 })
 
 const startItem = computed(
@@ -169,7 +184,18 @@ const endItem = computed(() =>
   Math.min(currentPage.value * itemsPerPage.value, totalItems.value)
 )
 
-const updatePage = (page) => {
+const handleSort = (column: string) => {
+  if (sortBy.value === column) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortBy.value = column
+    sortDirection.value = 'asc'
+  }
+
+  currentPage.value = 1
+}
+
+const updatePage = (page: number) => {
   currentPage.value = page
 }
 
@@ -182,6 +208,23 @@ const prevPage = () => {
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++
+  }
+}
+
+const handleUpdateItemsPerPage = (event: number) => {
+  itemsPerPage.value = event
+  updatePage(1)
+}
+
+const handleUpdate = (id: string) => {
+  console.log('Update user with id:', id)
+}
+
+const handleDelete = (id: string) => {
+  console.log('Delete user with id:', id)
+  const index = users.value.findIndex((user) => user.id === id)
+  if (index !== -1) {
+    users.value.splice(index, 1)
   }
 }
 </script>

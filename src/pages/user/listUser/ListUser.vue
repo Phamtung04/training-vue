@@ -1,147 +1,143 @@
 <template>
-  <v-data-table-server
-    v-model:items-per-page="itemsPerPage"
-    :headers="headers"
-    :items="serverItems"
-    :items-length="totalItems"
-    :loading="loading"
-    :search="search"
-    item-value="name"
-    @update:options="loadItems"
+  <table
+    class="mx-auto [border-spacing:0_8px] [border-collapse:collapse] mt-10"
   >
-  </v-data-table-server>
-</template>
-<script setup>
-import { ref } from 'vue'
+    <thead>
+      <tr class="h-15">
+        <th
+          v-for="(header, index) in headers"
+          :key="index"
+          class="w-40 text-center cursor-pointer"
+          @click="handleHeaderClick(header)"
+        >
+          <div class="flex items-center justify-center">
+            {{ header.value }}
+            <span v-if="header.sortable" class="ml-1">
+              <span v-if="sortBy === header.value && sortDirection === 'asc'">
+                ▲
+              </span>
+              <span
+                v-else-if="sortBy === header.value && sortDirection === 'desc'"
+              >
+                ▼
+              </span>
+              <span v-else class="text-gray-300"> ⇅ </span>
+            </span>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="(user, index) in displayedUsers"
+        :key="index"
+        class="mt-5 rounded-xl text-center hover:shadow-[0_2px_15px_3px_rgba(0,0,0,0.07),0_10px_20px_2px_rgba(0,0,0,0.04)] h-15"
+      >
+        <td>{{ user.Username }}</td>
+        <td>{{ user.Fullname }}</td>
+        <td>{{ user.Birthday }}</td>
+        <td>{{ user.Email }}</td>
+        <td>{{ user.Role }}</td>
+        <td>
+          <div v-if="option === ROLE.ADMIN">
+            <button
+              class="px-2 mr-2 w-15 text-center py-1 bg-green"
+              @click="handleUpdate(user.id)"
+            >
+              Edit
+            </button>
+            <button
+              class="px-2 mr-2 w-15 text-center py-1 bg-red"
+              @click="handleDelete(user.id)"
+            >
+              Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="flex justify-end items-center mb-3">
+    <div>
+      <label for="itemsPerPage"> Số lượng hiển thị:</label>
+      <select
+        id="itemsPerPage"
+        :value="itemsPerPage"
+        class="ml-2 p-1 border rounded w-10"
+        @change="
+          handleItemsPerPageChange(($event.target as HTMLSelectElement)?.value)
+        "
+      >
+        <option
+          v-for="(option, index) in perPageOptions"
+          :key="index"
+          :value="option"
+        >
+          {{ option }}
+        </option>
+      </select>
+    </div>
+    <div>
+      Hiển thị {{ startItem }} - {{ endItem }} trên tổng số
+      {{ totalItems }} người dùng
+    </div>
+    <div class="flex items-center gap-4">
+      <button
+        @click="prevPage"
+        :disabled="currentPage === 1"
+        class="px-3 py-2 bg-gray-300 rounded disabled:opacity-50"
+      >
+        <
+      </button>
 
-const desserts = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6,
-    carbs: 24,
-    protein: 4,
-    iron: '1',
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0,
-    carbs: 94,
-    protein: 0,
-    iron: '0',
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26,
-    carbs: 65,
-    protein: 7,
-    iron: '6',
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16,
-    carbs: 23,
-    protein: 6,
-    iron: '7',
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16,
-    carbs: 49,
-    protein: 3.9,
-    iron: '16',
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9,
-    carbs: 37,
-    protein: 4.3,
-    iron: '1',
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    iron: '2',
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    iron: '8',
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    iron: '45',
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25,
-    carbs: 51,
-    protein: 4.9,
-    iron: '22',
-  },
-]
-const FakeAPI = {
-  async fetch({ page, itemsPerPage, sortBy }) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const start = (page - 1) * itemsPerPage
-        const end = start + itemsPerPage
-        const items = desserts.slice()
-        if (sortBy.length) {
-          const sortKey = sortBy[0].key
-          const sortOrder = sortBy[0].order
-          items.sort((a, b) => {
-            const aValue = a[sortKey]
-            const bValue = b[sortKey]
-            return sortOrder === 'desc' ? bValue - aValue : aValue - bValue
-          })
-        }
-        const paginated = items.slice(start, end === -1 ? undefined : end)
-        resolve({ items: paginated, total: items.length })
-      }, 500)
-    })
-  },
-}
-const itemsPerPage = ref(10)
-const headers = ref([
-  {
-    title: 'Dessert (100g serving)',
-    align: 'start',
-    sortable: false,
-    key: 'name',
-  },
-  { title: 'Calories', key: 'calories', align: 'end' },
-  { title: 'Fat (g)', key: 'fat', align: 'end' },
-  { title: 'Carbs (g)', key: 'carbs', align: 'end' },
-  { title: 'Protein (g)', key: 'protein', align: 'end' },
-  { title: 'Iron (%)', key: 'iron', align: 'end' },
+      <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+
+      <button
+        @click="nextPage"
+        :disabled="currentPage === totalPages"
+        class="px-3 py-2 bg-gray-300 rounded disabled:opacity-50"
+      >
+        >
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ROLE } from '../../../constants/enum'
+import { ListUserProps } from './config'
+
+defineProps<ListUserProps>()
+
+const emit = defineEmits([
+  'update-page',
+  'prev-page',
+  'next-page',
+  'update-items-per-page',
+  'sort',
 ])
-const search = ref('')
-const serverItems = ref([])
-const loading = ref(true)
-const totalItems = ref(0)
-function loadItems({ page, itemsPerPage, sortBy }) {
-  loading.value = true
-  FakeAPI.fetch({ page, itemsPerPage, sortBy }).then(({ items, total }) => {
-    serverItems.value = items
-    totalItems.value = total
-    loading.value = false
-  })
+
+const updatePage = (page: number) => {
+  emit('update-page', page)
+}
+
+const handleItemsPerPageChange = (value: string) => {
+  const numValue = parseInt(value, 10)
+  emit('update-items-per-page', numValue)
+  updatePage(1)
+}
+
+const prevPage = () => {
+  emit('prev-page')
+}
+
+const nextPage = () => {
+  emit('next-page')
+}
+
+const handleHeaderClick = (header: { value: string; sortable?: boolean }) => {
+  if (header.sortable) {
+    emit('sort', header.value)
+  }
 }
 </script>

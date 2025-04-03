@@ -11,7 +11,7 @@ const api = axios.create({
 })
 
 api.interceptors.response.use((config) => {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('training_vue_token_access')
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
