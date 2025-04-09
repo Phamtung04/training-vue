@@ -10,7 +10,7 @@ const api = axios.create({
   },
 })
 
-api.interceptors.response.use((config) => {
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem('training_vue_token_access')
 
   if (token) {

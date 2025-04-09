@@ -1,7 +1,5 @@
 <template>
-  <table
-    class="mx-auto [border-spacing:0_8px] [border-collapse:collapse] mt-10"
-  >
+  <table class="mx-auto [border-spacing:0_8px] [border-collapse:collapse] mt-5">
     <thead>
       <tr class="h-15">
         <th
@@ -11,13 +9,13 @@
           @click="handleHeaderClick(header)"
         >
           <div class="flex items-center justify-center">
-            {{ header.value }}
+            {{ header.text }}
             <span v-if="header.sortable" class="ml-1">
-              <span v-if="sortBy === header.value && sortDirection === 'asc'">
+              <span v-if="sortBy === header.value && sortDirection === 'ASC'">
                 ▲
               </span>
               <span
-                v-else-if="sortBy === header.value && sortDirection === 'desc'"
+                v-else-if="sortBy === header.value && sortDirection === 'DESC'"
               >
                 ▼
               </span>
@@ -33,22 +31,22 @@
         :key="index"
         class="mt-5 rounded-xl text-center hover:shadow-[0_2px_15px_3px_rgba(0,0,0,0.07),0_10px_20px_2px_rgba(0,0,0,0.04)] h-15"
       >
-        <td>{{ user.Username }}</td>
-        <td>{{ user.Fullname }}</td>
-        <td>{{ user.Birthday }}</td>
-        <td>{{ user.Email }}</td>
-        <td>{{ user.Role }}</td>
+        <td>{{ user.userName }}</td>
+        <td>{{ user.fullName }}</td>
+        <td>{{ user.dob }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
         <td>
           <div v-if="option === ROLE.ADMIN">
             <button
               class="px-2 mr-2 w-15 text-center py-1 bg-green"
-              @click="handleUpdate(user.id)"
+              @click="handleUpdate(user._id)"
             >
               Edit
             </button>
             <button
               class="px-2 mr-2 w-15 text-center py-1 bg-red"
-              @click="handleDelete(user.id)"
+              @click="handleDelete(user._id)"
             >
               Delete
             </button>
@@ -57,7 +55,7 @@
       </tr>
     </tbody>
   </table>
-  <div class="flex justify-end items-center mb-3">
+  <div class="flex justify-end items-center mb-3 mt-5">
     <div>
       <label for="itemsPerPage"> Số lượng hiển thị:</label>
       <select

@@ -1,4 +1,28 @@
 <template>
+  <v-form class="flex items-center mt-10">
+    <CustomTextField
+      name="searchUserName"
+      label="Search username"
+      type="text"
+      v-model="searchValue.userName"
+    />
+    <CustomTextField
+      name="searchFullName"
+      label="Search fullname"
+      type="text"
+      v-model="searchValue.fullName"
+    />
+    <CustomSelectField
+      name="role"
+      :item="optionRole"
+      label="Role"
+      v-model="searchValue.role"
+    />
+    <v-btn class="mb-5" color="primary" height="54px" @click="handleSearch"
+      >Search</v-btn
+    >
+  </v-form>
+
   <ListUser
     :headers="headers"
     :displayedUsers="displayedUsers"
@@ -22,160 +46,85 @@
   />
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import CustomSelectField from '../../../components/textField/CustomSelectField.vue'
+import CustomTextField from '../../../components/textField/CustomTextField.vue'
+import { ref, computed, watch, toRaw, onMounted, watchEffect } from 'vue'
 import ListUser from './ListUser.vue'
+import { ROLE } from '../../../constants/enum'
+import { QueryClient, useMutation, useQuery } from '@tanstack/vue-query'
+import { userService } from '../../../config/apiService/userService'
+import { formatDate } from '../../../utils/timeUtils'
+import { User } from './config'
+import { useAlert } from '../../../composable/useAlert'
 
+const { success, error, confirm } = useAlert()
 const sortBy = ref<string>('')
-const sortDirection = ref<'asc' | 'desc'>('asc')
+const sortDirection = ref<'ASC' | 'DESC'>('ASC')
 
-const users = ref([
-  {
-    id: '8172711',
-    Username: 'john_doe',
-    Fullname: 'John Doe',
-    Birthday: '1990-05-15',
-    Email: 'john@example.com',
-    Role: 'Admin',
-    Other: 'N/A',
-  },
-  {
-    id: '8172712',
-    Username: 'jane_smith',
-    Fullname: 'Jane Smith',
-    Birthday: '1992-07-20',
-    Email: 'jane@example.com',
-    Role: 'User',
-    Other: 'N/A',
-  },
-  {
-    id: '8172713',
-    Username: 'alice_jones',
-    Fullname: 'Alice Jones',
-    Birthday: '1988-11-30',
-    Email: 'alice@example.com',
-    Role: 'Moderator',
-    Other: 'N/A',
-  },
-  {
-    id: '8172714',
-    Username: 'bob_brown',
-    Fullname: 'Bob Brown',
-    Birthday: '1995-02-25',
-    Email: 'bob@example.com',
-    Role: 'User',
-    Other: 'N/A',
-  },
-  {
-    id: '8172715',
-    Username: 'charlie_clark',
-    Fullname: 'Charlie Clark',
-    Birthday: '1993-09-10',
-    Email: 'charlie@example.com',
-    Role: 'Admin',
-    Other: 'N/A',
-  },
-  {
-    id: '8172716',
-    Username: 'david_white',
-    Fullname: 'David White',
-    Birthday: '1991-12-05',
-    Email: 'david@example.com',
-    Role: 'User',
-    Other: 'N/A',
-  },
-  {
-    id: '8172717',
-    Username: 'emily_davis',
-    Fullname: 'Emily Davis',
-    Birthday: '1998-06-18',
-    Email: 'emily@example.com',
-    Role: 'Moderator',
-    Other: 'N/A',
-  },
-  {
-    id: '8172718',
-    Username: 'frank_miller',
-    Fullname: 'Frank Miller',
-    Birthday: '1987-04-12',
-    Email: 'frank@example.com',
-    Role: 'User',
-    Other: 'N/A',
-  },
-  {
-    id: '8172719',
-    Username: 'david_white',
-    Fullname: 'David White',
-    Birthday: '1991-12-05',
-    Email: 'david@example.com',
-    Role: 'User',
-    Other: 'N/A',
-  },
-  {
-    id: '8172720',
-    Username: 'emily_davis',
-    Fullname: 'Emily Davis',
-    Birthday: '1998-06-18',
-    Email: 'emily@example.com',
-    Role: 'Moderator',
-    Other: 'N/A',
-  },
-  {
-    id: '8172721',
-    Username: 'frank_miller',
-    Fullname: 'Frank Miller',
-    Birthday: '1987-04-12',
-    Email: 'frank@example.com',
-    Role: 'User',
-    Other: 'N/A',
-  },
-])
-
-const headers = ref([
-  { value: 'Username', sortable: true },
-  { value: 'Fullname', sortable: true },
-  { value: 'Birthday', sortable: true },
-  { value: 'Email', sortable: true },
-  { value: 'Role', sortable: false },
-  { value: 'Other', sortable: false },
-])
 const option = 1
 const itemsPerPage = ref(3)
-const perPageOptions = ref([3, 5, 10, 15])
+const perPageOptions = ref([3, 5, 10, 15, 20])
 const currentPage = ref(1)
+const totalItems = computed(() => userList.value?.data?.totalDocs || 0)
+const searchValue = ref({ userName: '', fullName: '', role: '' })
+const appliedSearchValue = ref({ userName: '', fullName: '', role: '' })
+const users = computed<User[]>(() => userList.value?.data?.docs || [])
 
-const totalItems = computed(() => users.value.length)
+const optionRole = [
+  { label: 'All', value: '' },
+  { label: 'Admin', value: ROLE.ADMIN },
+  { label: 'User', value: ROLE.USER },
+]
+
+const {
+  data: userList,
+  isLoading,
+  refetch,
+} = useQuery({
+  queryKey: [
+    'userList',
+    currentPage,
+    itemsPerPage,
+    sortBy,
+    sortDirection,
+    appliedSearchValue,
+  ],
+  queryFn: () =>
+    userService.listUser(
+      currentPage.value,
+      itemsPerPage.value,
+      sortBy.value,
+      sortDirection.value,
+      {
+        userName: appliedSearchValue.value.userName,
+        fullName: appliedSearchValue.value.fullName,
+        role: appliedSearchValue.value.role,
+      }
+    ),
+  select: (data) => data.data,
+  refetchOnWindowFocus: false,
+})
+
+const headers = ref([
+  { value: 'userName', sortable: true, text: 'Username' },
+  { value: 'fullName', sortable: true, text: 'Fullname' },
+  { value: 'dob', sortable: true, text: 'Birthday' },
+  { value: 'email', sortable: true, text: 'Email' },
+  { value: 'Role', sortable: false, text: 'Role' },
+  { value: 'Actions', sortable: false, text: 'Actions' },
+])
+
 const totalPages = computed(() =>
   Math.ceil(totalItems.value / itemsPerPage.value)
 )
 
-const displayedUsers = computed(() => {
-  let sortedUsers = [...users.value]
-
-  if (sortBy.value) {
-    sortedUsers.sort((a, b) => {
-      const fieldA = a[sortBy.value]
-      const fieldB = b[sortBy.value]
-
-      if (sortBy.value === 'Birthday') {
-        const dateA = new Date(fieldA)
-        const dateB = new Date(fieldB)
-        return sortDirection.value === 'asc'
-          ? dateA.getTime() - dateB.getTime()
-          : dateB.getTime() - dateA.getTime()
-      }
-
-      if (sortDirection.value === 'asc') {
-        return fieldA.localeCompare(fieldB)
-      } else {
-        return fieldB.localeCompare(fieldA)
-      }
-    })
-  }
-
-  const start = (currentPage.value - 1) * itemsPerPage.value
-  const end = start + itemsPerPage.value
-  return sortedUsers.slice(start, end)
-})
+const displayedUsers = computed(() =>
+  users.value.map((user) => ({
+    ...user,
+    dob: formatDate(user.dob),
+    role: user.role === ROLE.ADMIN.toString() ? 'Admin' : 'User',
+  }))
+)
 
 const startItem = computed(
   () => (currentPage.value - 1) * itemsPerPage.value + 1
@@ -186,10 +135,10 @@ const endItem = computed(() =>
 
 const handleSort = (column: string) => {
   if (sortBy.value === column) {
-    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
+    sortDirection.value = sortDirection.value === 'ASC' ? 'DESC' : 'ASC'
   } else {
     sortBy.value = column
-    sortDirection.value = 'asc'
+    sortDirection.value = 'ASC'
   }
 
   currentPage.value = 1
@@ -220,11 +169,36 @@ const handleUpdate = (id: string) => {
   console.log('Update user with id:', id)
 }
 
-const handleDelete = (id: string) => {
+const { mutate: deleteUser } = useMutation({
+  mutationFn: async (id: string) => {
+    await userService.deleteUser({ id })
+  },
+  onSuccess: () => {
+    console.log('User deleted successfully')
+    refetch()
+  },
+  onError: (error) => {
+    console.error('Error deleting user:', error)
+  },
+})
+
+const handleDelete = async (id: string) => {
   console.log('Delete user with id:', id)
-  const index = users.value.findIndex((user) => user.id === id)
-  if (index !== -1) {
-    users.value.splice(index, 1)
+
+  const isOk = await confirm('Bạn có chắc muốn xóa người dùng này không?')
+
+  if (isOk) {
+    try {
+      deleteUser(id)
+      success('Xóa người dùng thành công!')
+    } catch (e) {
+      error('Xóa thất bại, vui lòng thử lại!')
+    }
   }
+}
+
+const handleSearch = () => {
+  appliedSearchValue.value = { ...searchValue.value }
+  currentPage.value = 1
 }
 </script>

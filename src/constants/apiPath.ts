@@ -1,4 +1,4 @@
-export const APi_PATH = {
+export const API_PATH = {
   AUTH: {
     REGISTER: '/users/create',
     LOGIN: '/auth/login',

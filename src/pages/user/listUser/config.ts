@@ -1,14 +1,20 @@
+// interface Doc {
+
+// }
+
+export interface User {
+  _id: string
+  userName: string
+  fullName: string
+  dob: string
+  email: string
+  role: string
+  Actions: string
+}
+
 export interface ListUserProps {
-  headers: { value: string; sortable?: boolean }[]
-  displayedUsers: {
-    id: string
-    Username: string
-    Fullname: string
-    Birthday: string
-    Email: string
-    Role: string
-    Other: string
-  }[]
+  headers: { value: string; text: string; sortable?: boolean }[]
+  displayedUsers: User[]
   itemsPerPage: number
   perPageOptions: number[]
   currentPage: number
@@ -20,5 +26,5 @@ export interface ListUserProps {
   handleUpdate: (id: string) => void
   handleDelete: (id: string) => void
   sortBy: string
-  sortDirection: 'asc' | 'desc'
+  sortDirection: 'ASC' | 'DESC'
 }
