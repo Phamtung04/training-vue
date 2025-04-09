@@ -33,7 +33,7 @@
     :totalPages="totalPages"
     :startItem="startItem"
     :endItem="endItem"
-    :option="option"
+    :option="option || ''"
     :handleUpdate="handleUpdate"
     :handleDelete="handleDelete"
     :sortBy="sortBy"
@@ -57,12 +57,14 @@ import { formatDate } from '../../../utils/timeUtils'
 import { User } from './config'
 import { useAlert } from '../../../composable/useAlert'
 import { VALIDATE_CODES } from '../../../constants/validateCode'
+import { getUserInfo } from '../../../composable/useUserToken/useUserToken'
 
 const { successNotify, errorNotify, confirm } = useAlert()
 const sortBy = ref<string>('')
 const sortDirection = ref<'ASC' | 'DESC'>('ASC')
+const user = getUserInfo()
 
-const option = 1
+const option = user?.role
 const itemsPerPage = ref(5)
 const perPageOptions = ref([5, 10, 15, 20])
 const currentPage = ref(1)
@@ -120,11 +122,13 @@ const totalPages = computed(() =>
 )
 
 const displayedUsers = computed(() =>
-  users.value.map((user) => ({
-    ...user,
-    dob: formatDate(user.dob),
-    role: user.role === ROLE.ADMIN.toString() ? 'Admin' : 'User',
-  }))
+  users.value
+    .filter((users) => users._id !== user?._id)
+    .map((user) => ({
+      ...user,
+      dob: formatDate(user.dob),
+      role: user.role === ROLE.ADMIN.toString() ? 'Admin' : 'User',
+    }))
 )
 
 const startItem = computed(

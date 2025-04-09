@@ -37,7 +37,7 @@
         <td>{{ user.email }}</td>
         <td>{{ user.role }}</td>
         <td>
-          <div v-if="option === ROLE.ADMIN">
+          <div v-if="option === ROLE.ADMIN.toString()">
             <button
               class="px-2 mr-2 w-15 text-center py-1 bg-green"
               @click="handleUpdate(user._id)"

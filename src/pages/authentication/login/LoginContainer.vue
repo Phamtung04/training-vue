@@ -49,6 +49,7 @@ const mutate = useMutation({
   },
   onError: (error: any) => {
     const errorMessages = error?.validationErrors || {}
+    errorNotify(VALIDATE_CODES.I0003)
     console.log('error', errorMessages)
 
     errorMessages.forEach(
@@ -56,7 +57,6 @@ const mutate = useMutation({
         setFieldError(field, message)
       }
     )
-    errorNotify(VALIDATE_CODES.I0003)
     console.log('error', error)
   },
 })

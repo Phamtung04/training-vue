@@ -22,7 +22,7 @@ export interface ListUserProps {
   totalPages: number
   startItem: number
   endItem: number
-  option: number
+  option: string
   handleUpdate: (id: string) => void
   handleDelete: (id: string) => void
   sortBy: string
