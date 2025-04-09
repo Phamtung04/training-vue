@@ -8,6 +8,7 @@ import Layout from '../layout/admin/layout.vue'
 import ListUser from '../pages/user/listUser/ListUser.vue'
 import Order from '../pages/order/Order.vue'
 import ListUserContainer from '../pages/user/listUser/ListUserContainer.vue'
+import { authGuard } from './authGuard'
 
 const routes = [
   {
@@ -62,5 +63,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 })
+
+router.beforeEach(authGuard)
 
 export default router

@@ -23,6 +23,8 @@ import { passwordCodeSchema } from './config'
 import { useRouter } from 'vue-router'
 import { useMutation } from '@tanstack/vue-query'
 import { authService } from '../../../config/apiService/authService'
+import { useAlert } from '../../../composable/useAlert'
+import { VALIDATE_CODES } from '../../../constants/validateCode'
 
 const router = useRouter()
 
@@ -30,15 +32,18 @@ const { handleSubmit, setFieldError } = useForm({
   validationSchema: passwordCodeSchema,
 })
 
+const { successNotify, errorNotify } = useAlert()
+
 const mutate = useMutation({
   mutationFn: authService.confirmForgotPassword,
-  onSuccess: (dataConfirm) => {
+  onSuccess: () => {
     router.push('/login')
     localStorage.removeItem('training_vue_token_email')
-    console.log('success', dataConfirm)
+    successNotify(VALIDATE_CODES.I0001)
   },
   onError: (error: any) => {
     const errorMessages = error?.validationErrors || {}
+    errorNotify(VALIDATE_CODES.I0002)
     console.log('error', errorMessages)
 
     errorMessages.forEach(

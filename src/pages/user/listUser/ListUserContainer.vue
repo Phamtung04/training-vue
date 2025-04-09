@@ -48,22 +48,23 @@
 <script setup lang="ts">
 import CustomSelectField from '../../../components/textField/CustomSelectField.vue'
 import CustomTextField from '../../../components/textField/CustomTextField.vue'
-import { ref, computed, watch, toRaw, onMounted, watchEffect } from 'vue'
+import { ref, computed } from 'vue'
 import ListUser from './ListUser.vue'
 import { ROLE } from '../../../constants/enum'
-import { QueryClient, useMutation, useQuery } from '@tanstack/vue-query'
+import { useMutation, useQuery } from '@tanstack/vue-query'
 import { userService } from '../../../config/apiService/userService'
 import { formatDate } from '../../../utils/timeUtils'
 import { User } from './config'
 import { useAlert } from '../../../composable/useAlert'
+import { VALIDATE_CODES } from '../../../constants/validateCode'
 
-const { success, error, confirm } = useAlert()
+const { successNotify, errorNotify, confirm } = useAlert()
 const sortBy = ref<string>('')
 const sortDirection = ref<'ASC' | 'DESC'>('ASC')
 
 const option = 1
-const itemsPerPage = ref(3)
-const perPageOptions = ref([3, 5, 10, 15, 20])
+const itemsPerPage = ref(5)
+const perPageOptions = ref([5, 10, 15, 20])
 const currentPage = ref(1)
 const totalItems = computed(() => userList.value?.data?.totalDocs || 0)
 const searchValue = ref({ userName: '', fullName: '', role: '' })
@@ -190,9 +191,9 @@ const handleDelete = async (id: string) => {
   if (isOk) {
     try {
       deleteUser(id)
-      success('Xóa người dùng thành công!')
+      successNotify(VALIDATE_CODES.I0001)
     } catch (e) {
-      error('Xóa thất bại, vui lòng thử lại!')
+      errorNotify(VALIDATE_CODES.I0002)
     }
   }
 }

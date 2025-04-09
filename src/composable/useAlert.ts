@@ -2,7 +2,7 @@
 import Swal from 'sweetalert2'
 
 export const useAlert = () => {
-  const success = (message: string) => {
+  const successNotify = (message: string) => {
     Swal.fire({
       icon: 'success',
       title: 'Thành công!',
@@ -12,7 +12,7 @@ export const useAlert = () => {
     })
   }
 
-  const error = (message: string) => {
+  const errorNotify = (message: string) => {
     Swal.fire({
       icon: 'error',
       title: 'Thất bại!',
@@ -33,8 +33,8 @@ export const useAlert = () => {
   }
 
   return {
-    success,
-    error,
+    successNotify,
+    errorNotify,
     confirm,
   }
 }

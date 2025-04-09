@@ -27,22 +27,26 @@ import { validationSchema } from './config'
 import { useMutation } from '@tanstack/vue-query'
 import { authService } from '../../../config/apiService/authService'
 import { useRouter } from 'vue-router'
+import { useAlert } from '../../../composable/useAlert'
+import { VALIDATE_CODES } from '../../../constants/validateCode'
 
 const { handleSubmit, setFieldError } = useForm({
   validationSchema,
 })
+
+const { successNotify, errorNotify } = useAlert()
 const router = useRouter()
 
 const mutation = useMutation({
   mutationFn: authService.register,
   onSuccess: () => {
     router.push('/login')
-    console.log('success')
+    successNotify(VALIDATE_CODES.I0001)
   },
   onError: (error: any) => {
     const errorMessages = error?.validationErrors || {}
     console.log('error', error)
-
+    errorNotify(VALIDATE_CODES.I0002)
     errorMessages.forEach(
       ({ field, message }: { field: string; message: string }) => {
         setFieldError(field, message)

@@ -27,10 +27,13 @@ import { loginSchema } from './config'
 import { useRouter } from 'vue-router'
 import { useMutation } from '@tanstack/vue-query'
 import { authService } from '../../../config/apiService/authService'
+import { useAlert } from '../../../composable/useAlert'
+import { VALIDATE_CODES } from '../../../constants/validateCode'
 
 const { handleSubmit, setFieldError } = useForm({
   validationSchema: loginSchema,
 })
+const { successNotify, errorNotify } = useAlert()
 
 const router = useRouter()
 
@@ -42,7 +45,7 @@ const mutate = useMutation({
       'training_vue_token_access',
       dataAuth.data.data.accessToken
     )
-    console.log('success', dataAuth)
+    successNotify(VALIDATE_CODES.I0001)
   },
   onError: (error: any) => {
     const errorMessages = error?.validationErrors || {}
@@ -53,6 +56,7 @@ const mutate = useMutation({
         setFieldError(field, message)
       }
     )
+    errorNotify(VALIDATE_CODES.I0003)
     console.log('error', error)
   },
 })
