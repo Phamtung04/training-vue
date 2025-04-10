@@ -28,7 +28,7 @@
 
   <ListUser
     :headers="headers"
-    :displayedUsers="displayedUsers"
+    :displayedUsers="isLoading ? [] : displayedUsers"
     :itemsPerPage="itemsPerPage"
     :perPageOptions="perPageOptions"
     :currentPage="currentPage"

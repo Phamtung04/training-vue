@@ -24,6 +24,7 @@
                   type="submit"
                   text="Save"
                   variant="tonal"
+                  :loading="updateMutation.isPending.value"
                 ></v-btn>
               </div>
             </form>
@@ -41,21 +42,19 @@ import { updateSchema, UserProps } from './config.ts'
 import { useForm } from 'vee-validate'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { userService } from '../../../config/apiService/userService'
+import { useAlert } from '../../../composable/useAlert.ts'
+import { VALIDATE_CODES } from '../../../constants/validateCode.ts'
 
 const props = defineProps<UserProps>()
+const emit = defineEmits(['close', 'update'])
+const BASE_URL = import.meta.env.VITE_BASE_URL_IMAGE
+const { successNotify, errorNotify } = useAlert()
 
 const { handleSubmit, values, setFieldValue, setFieldError } = useForm({
   validationSchema: updateSchema,
 })
 
-const emit = defineEmits(['close', 'update'])
-const BASE_URL = import.meta.env.VITE_BASE_URL_IMAGE
-
-const {
-  data: userData,
-  isLoading,
-  refetch,
-} = useQuery({
+const { data: userData, refetch } = useQuery({
   queryKey: ['user', props.id],
   queryFn: () => userService.getUserById({ id: props.id }),
   select: (response) => response.data?.data,
@@ -69,12 +68,20 @@ const updateMutation = useMutation({
     const response = await userService.updateUser(formData)
     return response
   },
-  onSuccess: (data) => {
-    console.log(data)
+  onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ['user'] })
+    successNotify(VALIDATE_CODES.I0001)
     emit('close')
   },
-  onError: (error) => {
+  onError: (error: any) => {
+    errorNotify(VALIDATE_CODES.I0002)
+    const errorMessages = error?.validationErrors || {}
+    errorMessages.forEach(
+      ({ field, message }: { field: string; message: string }) => {
+        setFieldError(field, message)
+      }
+    )
+
     console.log(error)
   },
 })

@@ -10,7 +10,13 @@
         <v-btn class="w-[100px] ml-3" color="primary" @click="onSubmitCancel"
           >Cancel</v-btn
         >
-        <v-btn class="w-[100px] ml-3" color="primary" type="submit">Send</v-btn>
+        <v-btn
+          class="w-[100px] ml-3"
+          color="primary"
+          type="submit"
+          :loading="mutation.isPending.value"
+          >Send</v-btn
+        >
       </div>
     </v-form>
   </v-container>
@@ -34,7 +40,7 @@ const { handleSubmit, setFieldError } = useForm({
 
 const { successNotify, errorNotify } = useAlert()
 
-const mutate = useMutation({
+const mutation = useMutation({
   mutationFn: authService.confirmForgotPassword,
   onSuccess: () => {
     router.push('/login')
@@ -62,7 +68,7 @@ const onSubmitCancel = () => {
 const onSubmit = handleSubmit((data) => {
   const email = localStorage.getItem('training_vue_token_email')
   const requestBody = { email, ...data }
-  mutate.mutate(requestBody)
+  mutation.mutate(requestBody)
 })
 </script>
 
