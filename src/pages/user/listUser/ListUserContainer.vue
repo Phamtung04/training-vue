@@ -1,24 +1,27 @@
 <template>
   <v-form class="flex items-center mt-10">
     <CustomTextField
+      class="ml-2"
       name="searchUserName"
       label="Search username"
       type="text"
       v-model="searchValue.userName"
     />
     <CustomTextField
+      class="ml-2"
       name="searchFullName"
       label="Search fullname"
       type="text"
       v-model="searchValue.fullName"
     />
     <CustomSelectField
+      class="ml-2"
       name="role"
       :item="optionRole"
       label="Role"
       v-model="searchValue.role"
     />
-    <v-btn class="mb-5" color="primary" height="54px" @click="handleSearch"
+    <v-btn class="mb-5 ml-2" color="primary" height="54px" @click="handleSearch"
       >Search</v-btn
     >
   </v-form>
@@ -43,6 +46,14 @@
     @next-page="nextPage"
     @update-items-per-page="handleUpdateItemsPerPage"
     @sort="handleSort"
+    @handle-update="handleUpdate"
+  />
+
+  <UpdateUserContainer
+    :isShow="isShowUpdate"
+    :id="selectedUserId"
+    :userData="selectedUser"
+    @close="isShowUpdate = false"
   />
 </template>
 <script setup lang="ts">
@@ -58,6 +69,7 @@ import { User } from './config'
 import { useAlert } from '../../../composable/useAlert'
 import { VALIDATE_CODES } from '../../../constants/validateCode'
 import { getUserInfo } from '../../../composable/useUserToken/useUserToken'
+import UpdateUserContainer from '../updateUser/UpdateUserContainer.vue'
 
 const { successNotify, errorNotify, confirm } = useAlert()
 const sortBy = ref<string>('')
@@ -72,6 +84,9 @@ const totalItems = computed(() => userList.value?.data?.totalDocs || 0)
 const searchValue = ref({ userName: '', fullName: '', role: '' })
 const appliedSearchValue = ref({ userName: '', fullName: '', role: '' })
 const users = computed<User[]>(() => userList.value?.data?.docs || [])
+const isShowUpdate = ref(false)
+const selectedUserId = ref('')
+const selectedUser = ref({})
 
 const optionRole = [
   { label: 'All', value: '' },
@@ -170,8 +185,9 @@ const handleUpdateItemsPerPage = (event: number) => {
   updatePage(1)
 }
 
-const handleUpdate = (id: string) => {
-  console.log('Update user with id:', id)
+const handleUpdate = (userId: string) => {
+  selectedUserId.value = userId
+  isShowUpdate.value = true
 }
 
 const { mutate: deleteUser } = useMutation({

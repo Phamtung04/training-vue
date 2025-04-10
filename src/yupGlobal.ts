@@ -9,6 +9,14 @@ declare module 'yup' {
     dob(): this
     phoneNumber(): this
   }
+  // interface MixedSchema<
+  //   TType = any,
+  //   TContext = any,
+  //   TDefault = undefined,
+  //   TFlags = '',
+  // > {
+  //   avatar(): MixedSchema<TType, TContext, TDefault, TFlags>
+  // }
 }
 
 yup.addMethod(yup.string, 'passwordConfirm', function () {
@@ -36,5 +44,19 @@ yup.addMethod(yup.string, 'phoneNumber', function () {
     .max(10, VALIDATE_CODES.E0002(10))
     .required(VALIDATE_CODES.E0001)
 })
+
+// yup.addMethod<yup.MixedSchema<any | null | undefined>>(
+//   yup.mixed,
+//   'avatar',
+//   function () {
+//     return this.test('fileType', VALIDATE_CODES.E0009, (value) => {
+//       return (
+//         !value ||
+//         (value instanceof File &&
+//           ['image/jpeg', 'image/png'].includes(value.type))
+//       )
+//     }).nullable()
+//   }
+// )
 
 export default yup

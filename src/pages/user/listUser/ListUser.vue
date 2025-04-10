@@ -40,7 +40,7 @@
           <div v-if="option === ROLE.ADMIN.toString()">
             <button
               class="px-2 mr-2 w-15 text-center py-1 bg-green"
-              @click="handleUpdate(user._id)"
+              @click="emit('handle-update', user._id)"
             >
               Edit
             </button>
@@ -113,6 +113,7 @@ const emit = defineEmits([
   'next-page',
   'update-items-per-page',
   'sort',
+  'handle-update',
 ])
 
 const updatePage = (page: number) => {

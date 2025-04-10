@@ -26,7 +26,7 @@ const { value: field, errorMessage } = useField(() => props.name!)
 </script> -->
 
 <template>
-  <v-responsive class="mx-auto" max-width="344">
+  <v-responsive class="mx-auto" max-width="500">
     <v-text-field
       :model-value="modelValue"
       :type="props.type"

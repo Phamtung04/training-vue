@@ -7,7 +7,11 @@
 
     <v-form @submit="onSubmit" class="w-[370px] mx-auto">
       <div class="mx-auto mt-5 h-96 overflow-y-auto scrollbar-hide">
-        <Register />
+        <Register
+          :values="values"
+          :setFieldValue="setFieldValue"
+          @update:model-value="(field, value) => setFieldValue(field, value)"
+        />
       </div>
       <v-btn class="w-[345px] mt-5 ml-1" color="primary" type="submit">
         Register
@@ -30,7 +34,7 @@ import { useRouter } from 'vue-router'
 import { useAlert } from '../../../composable/useAlert'
 import { VALIDATE_CODES } from '../../../constants/validateCode'
 
-const { handleSubmit, setFieldError } = useForm({
+const { handleSubmit, setFieldError, values, setFieldValue } = useForm({
   validationSchema,
 })
 
@@ -46,7 +50,7 @@ const mutation = useMutation({
   onError: (error: any) => {
     const errorMessages = error?.validationErrors || {}
     console.log('error', error)
-    errorNotify(VALIDATE_CODES.I0002)
+    errorNotify(error.response.data.message || VALIDATE_CODES.I0002)
     errorMessages.forEach(
       ({ field, message }: { field: string; message: string }) => {
         setFieldError(field, message)

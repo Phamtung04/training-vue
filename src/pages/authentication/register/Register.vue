@@ -1,7 +1,33 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import CustomSelectField from '../../../components/textField/CustomSelectField.vue'
 import CustomTextField from '../../../components/textField/CustomTextField.vue'
 import { GENDER, ROLE } from '../../../constants/enum'
+
+const props = defineProps<{
+  values: any
+  setFieldValue: (field: string, value: any) => void
+}>()
+
+// Computed properties với getter và setter
+const genderValue = computed({
+  get: () => props.values.gender,
+  set: (value) => props.setFieldValue('gender', value),
+})
+
+const roleValue = computed({
+  get: () => props.values.role,
+  set: (value) => props.setFieldValue('role', value),
+})
+
+// Hoặc sử dụng hàm update riêng
+const updateGender = (value: any) => {
+  props.setFieldValue('gender', value)
+}
+
+const updateRole = (value: any) => {
+  props.setFieldValue('role', value)
+}
 
 const optionRole = [
   { label: 'Admin', value: ROLE.ADMIN },
@@ -41,12 +67,16 @@ const optionGender = [
       name="gender"
       :item="optionGender"
       label="Gender"
+      :model-value="genderValue"
+      @update:model-value="updateGender"
     />
     <CustomSelectField
       class="mb-3"
       name="role"
       :item="optionRole"
       label="Role"
+      :model-value="roleValue"
+      @update:model-value="updateRole"
     />
     <CustomTextField
       class="mb-3"
