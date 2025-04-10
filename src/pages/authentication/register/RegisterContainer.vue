@@ -13,7 +13,12 @@
           @update:model-value="(field, value) => setFieldValue(field, value)"
         />
       </div>
-      <v-btn class="w-[345px] mt-5 ml-1" color="primary" type="submit">
+      <v-btn
+        class="w-[345px] mt-5 ml-1"
+        color="primary"
+        type="submit"
+        :loading="mutation.isPending.value"
+      >
         Register
       </v-btn>
     </v-form>
@@ -59,6 +64,7 @@ const mutation = useMutation({
   },
 })
 
+console.log('loading: ', mutation)
 const onSubmit = handleSubmit((data) => {
   mutation.mutate(data)
   console.log(data)

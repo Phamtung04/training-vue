@@ -11,7 +11,13 @@
 
     <v-form @submit="onSubmit">
       <ForgotPassword />
-      <v-btn type="submit" class="w-[345px] ml-3" color="primary">Send</v-btn>
+      <v-btn
+        type="submit"
+        class="w-[345px] ml-3"
+        color="primary"
+        :loading="mutation.isPending.value"
+        >Send</v-btn
+      >
     </v-form>
   </v-container>
 </template>
@@ -34,7 +40,7 @@ const { handleSubmit, setFieldError } = useForm({
 
 const { errorNotify } = useAlert()
 
-const mutate = useMutation({
+const mutation = useMutation({
   mutationFn: authService.forgotPassword,
   onSuccess: (dataForgot) => {
     router.push('/password-code')
@@ -54,7 +60,7 @@ const mutate = useMutation({
 })
 
 const onSubmit = handleSubmit((data) => {
-  mutate.mutate(data)
+  mutation.mutate(data)
   localStorage.setItem('training_vue_token_email', data.email)
   console.log(data)
 })

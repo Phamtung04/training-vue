@@ -9,7 +9,12 @@
       <router-link class="text-blue-400 float-right mr-3" to="/forgot-password"
         >Forgot password?</router-link
       >
-      <v-btn class="w-[345px] mt-5 ml-3" color="primary" type="submit">
+      <v-btn
+        class="w-[345px] mt-5 ml-3"
+        color="primary"
+        type="submit"
+        :loading="mutate.isPending.value"
+      >
         Login
       </v-btn>
     </v-form>

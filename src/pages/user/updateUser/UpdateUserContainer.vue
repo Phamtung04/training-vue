@@ -39,7 +39,7 @@ import UpdateUser from './UpdateUser.vue'
 import { computed, watchEffect } from 'vue'
 import { updateSchema, UserProps } from './config.ts'
 import { useForm } from 'vee-validate'
-import { useQuery } from '@tanstack/vue-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { userService } from '../../../config/apiService/userService'
 
 const props = defineProps<UserProps>()
@@ -61,6 +61,22 @@ const {
   select: (response) => response.data?.data,
   enabled: computed(() => !!props.id),
   staleTime: 0,
+})
+const queryClient = useQueryClient()
+
+const updateMutation = useMutation({
+  mutationFn: async (formData: any) => {
+    const response = await userService.updateUser(formData)
+    return response
+  },
+  onSuccess: (data) => {
+    console.log(data)
+    queryClient.invalidateQueries({ queryKey: ['user'] })
+    emit('close')
+  },
+  onError: (error) => {
+    console.log(error)
+  },
 })
 
 watchEffect(() => {
@@ -98,6 +114,20 @@ const closeDialog = () => {
 }
 
 const onSubmit = handleSubmit((data) => {
-  console.log(data)
+  const formData = new FormData()
+  formData.append('id', props.id)
+  formData.append('userName', values.userName)
+  formData.append('fullName', values.fullName)
+  formData.append('dob', values.dob)
+  formData.append('gender', values.gender)
+  formData.append('role', values.role)
+  formData.append('phoneNumber', values.phoneNumber)
+  formData.append('description', values.description ?? '')
+
+  if (data.avatar && values.avatar instanceof File) {
+    formData.append('file', values.avatar)
+  }
+
+  updateMutation.mutate(formData)
 })
 </script>
