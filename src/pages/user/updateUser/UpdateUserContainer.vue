@@ -1,7 +1,10 @@
 <template>
   <div class="pa-4 text-center">
     <v-dialog v-model="dialogVisible" max-width="600">
-      <v-card prepend-icon="mdi-account" title="User Profile">
+      <v-card
+        prepend-icon="mdi-account"
+        :title="t('updateUserContainer.update')"
+      >
         <v-card-text>
           <v-row dense class="justify-center">
             <form @submit="onSubmit">
@@ -44,7 +47,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { userService } from '../../../config/apiService/userService'
 import { useAlert } from '../../../composable/useAlert.ts'
 import { VALIDATE_CODES } from '../../../constants/validateCode.ts'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const props = defineProps<UserProps>()
 const emit = defineEmits(['close', 'update'])
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMAGE
@@ -81,7 +86,6 @@ const updateMutation = useMutation({
         setFieldError(field, message)
       }
     )
-
     console.log(error)
   },
 })

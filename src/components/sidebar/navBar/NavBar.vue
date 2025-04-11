@@ -14,18 +14,23 @@
 </template>
 
 <script setup lang="ts">
-const items = [
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
+const items = computed(() => [
   {
-    label: 'User',
+    label: t('menuContainer.listUser'),
     icon: 'mdi-view-dashboard',
     to: '/user',
   },
   {
-    label: 'Oder',
+    label: t('menuContainer.order'),
     icon: 'mdi-account',
     to: '/order',
   },
-]
+])
 </script>
 
 <style scoped></style>

@@ -3,11 +3,15 @@
     class="w-full rounded-xl shadow-[0_2px_15px_3px_rgba(0,0,0,0.07),0_10px_20px_2px_rgba(0,0,0,0.04)] md:mt-0 sm:max-w-md xl:p-0"
     max-width="400"
   >
-    <h3 class="text-center text-4xl mt-5 font-semibold">Login</h3>
+    <h3 class="text-center text-4xl mt-5 font-semibold">
+      {{ t('loginContainer.login') }}
+    </h3>
     <v-form @submit="onSubmit" class="w-[370px] mx-auto">
       <Login />
-      <router-link class="text-blue-400 float-right mr-3" to="/forgot-password"
-        >Forgot password?</router-link
+      <router-link
+        class="text-blue-400 float-right mr-3"
+        to="/forgot-password"
+        >{{ t('loginContainer.forgetYourPassword') }}</router-link
       >
       <v-btn
         class="w-[345px] mt-5 ml-3"
@@ -15,12 +19,14 @@
         type="submit"
         :loading="mutate.isPending.value"
       >
-        Login
+        {{ t('loginContainer.login') }}
       </v-btn>
     </v-form>
     <p class="text-center mt-5">
-      If you don't have an account?
-      <router-link to="/register" class="text-blue-400"> Register </router-link>
+      {{ t('loginContainer.ifYouHaveAlreadyAccount') }}
+      <router-link to="/register" class="text-blue-400">
+        {{ t('loginContainer.register') }}
+      </router-link>
     </p>
   </v-container>
 </template>
@@ -34,12 +40,13 @@ import { useMutation } from '@tanstack/vue-query'
 import { authService } from '../../../config/apiService/authService'
 import { useAlert } from '../../../composable/useAlert'
 import { VALIDATE_CODES } from '../../../constants/validateCode'
+import { useI18n } from 'vue-i18n'
 
 const { handleSubmit, setFieldError } = useForm({
   validationSchema: loginSchema,
 })
 const { successNotify, errorNotify } = useAlert()
-
+const { t } = useI18n()
 const router = useRouter()
 
 const mutate = useMutation({
@@ -55,7 +62,6 @@ const mutate = useMutation({
   onError: (error: any) => {
     const errorMessages = error?.validationErrors || {}
     errorNotify(VALIDATE_CODES.I0003)
-    console.log('error', errorMessages)
 
     errorMessages.forEach(
       ({ field, message }: { field: string; message: string }) => {
@@ -68,7 +74,6 @@ const mutate = useMutation({
 
 const onSubmit = handleSubmit((data) => {
   mutate.mutate(data)
-  console.log(data)
 })
 </script>
 

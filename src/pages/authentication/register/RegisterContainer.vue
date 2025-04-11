@@ -3,7 +3,9 @@
     class="w-full rounded-3xl shadow-[0_2px_15px_3px_rgba(0,0,0,0.07),0_10px_20px_2px_rgba(0,0,0,0.04)] md:mt-0 sm:max-w-md xl:p-0"
     max-width="400"
   >
-    <h3 class="text-center text-4xl mt-5 font-semibold">Register</h3>
+    <h3 class="text-center text-4xl mt-5 font-semibold">
+      {{ t('registerContainer.register') }}
+    </h3>
 
     <v-form @submit="onSubmit" class="w-[370px] mx-auto">
       <div class="mx-auto mt-5 h-96 overflow-y-auto scrollbar-hide">
@@ -19,12 +21,14 @@
         type="submit"
         :loading="mutation.isPending.value"
       >
-        Register
+        {{ t('registerContainer.register') }}
       </v-btn>
     </v-form>
     <p class="text-center mt-5">
-      If you have already account?
-      <router-link to="/login" class="text-blue-400"> Login </router-link>
+      {{ t('registerContainer.ifYouHaveAlreadyAccount') }}
+      <router-link to="/login" class="text-blue-400">
+        {{ t('registerContainer.login') }}
+      </router-link>
     </p>
   </v-container>
 </template>
@@ -38,6 +42,7 @@ import { authService } from '../../../config/apiService/authService'
 import { useRouter } from 'vue-router'
 import { useAlert } from '../../../composable/useAlert'
 import { VALIDATE_CODES } from '../../../constants/validateCode'
+import { useI18n } from 'vue-i18n'
 
 const { handleSubmit, setFieldError, values, setFieldValue } = useForm({
   validationSchema,
@@ -45,6 +50,7 @@ const { handleSubmit, setFieldError, values, setFieldValue } = useForm({
 
 const { successNotify, errorNotify } = useAlert()
 const router = useRouter()
+const { t } = useI18n()
 
 const mutation = useMutation({
   mutationFn: authService.register,
@@ -64,9 +70,7 @@ const mutation = useMutation({
   },
 })
 
-console.log('loading: ', mutation)
 const onSubmit = handleSubmit((data) => {
   mutation.mutate(data)
-  console.log(data)
 })
 </script>

@@ -3,13 +3,15 @@ import { computed } from 'vue'
 import CustomSelectField from '../../../components/textField/CustomSelectField.vue'
 import CustomTextField from '../../../components/textField/CustomTextField.vue'
 import { GENDER, ROLE } from '../../../constants/enum'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
   values: any
   setFieldValue: (field: string, value: any) => void
 }>()
 
-// Computed properties với getter và setter
+const { t } = useI18n()
+
 const genderValue = computed({
   get: () => props.values.gender,
   set: (value) => props.setFieldValue('gender', value),
@@ -20,7 +22,6 @@ const roleValue = computed({
   set: (value) => props.setFieldValue('role', value),
 })
 
-// Hoặc sử dụng hàm update riêng
 const updateGender = (value: any) => {
   props.setFieldValue('gender', value)
 }
@@ -30,13 +31,13 @@ const updateRole = (value: any) => {
 }
 
 const optionRole = [
-  { label: 'Admin', value: ROLE.ADMIN },
-  { label: 'User', value: ROLE.USER },
+  { label: t('registerContainer.admin'), value: ROLE.ADMIN },
+  { label: t('registerContainer.user'), value: ROLE.USER },
 ]
 
 const optionGender = [
-  { label: 'Male', value: GENDER.MALE },
-  { label: 'Female', value: GENDER.FEMALE },
+  { label: t('registerContainer.male'), value: GENDER.MALE },
+  { label: t('registerContainer.female'), value: GENDER.FEMALE },
 ]
 </script>
 
@@ -45,28 +46,38 @@ const optionGender = [
     <CustomTextField
       class="mb-3"
       name="userName"
-      label="userName"
+      :label="t('registerContainer.userName')"
       type="text"
     />
     <CustomTextField
       class="mb-3"
       name="fullName"
-      label="Full name"
+      :label="t('registerContainer.fullName')"
       type="text"
     />
-    <CustomTextField class="mb-3" name="email" label="email" type="email" />
-    <CustomTextField class="mb-3" name="dob" label="birthday" type="date" />
+    <CustomTextField
+      class="mb-3"
+      name="email"
+      :label="t('registerContainer.email')"
+      type="email"
+    />
+    <CustomTextField
+      class="mb-3"
+      name="dob"
+      :label="t('registerContainer.birthday')"
+      type="date"
+    />
     <CustomTextField
       class="mb-3"
       name="phoneNumber"
-      label="Phone Number"
+      :label="t('registerContainer.phone')"
       type="text"
     />
     <CustomSelectField
       class="mb-3"
       name="gender"
       :item="optionGender"
-      label="Gender"
+      :label="t('registerContainer.gender')"
       :model-value="genderValue"
       @update:model-value="updateGender"
     />
@@ -74,20 +85,20 @@ const optionGender = [
       class="mb-3"
       name="role"
       :item="optionRole"
-      label="Role"
+      :label="t('registerContainer.role')"
       :model-value="roleValue"
       @update:model-value="updateRole"
     />
     <CustomTextField
       class="mb-3"
       name="password"
-      label="password"
+      :label="t('registerContainer.password')"
       type="password"
     />
     <CustomTextField
       class="mb-3"
       name="confirmPassword"
-      label="confirmPassword"
+      :label="t('registerContainer.confirmPassword')"
       type="password"
     />
   </div>

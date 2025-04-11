@@ -1,4 +1,3 @@
-import { data } from 'autoprefixer'
 import { API_PATH } from '../../constants/apiPath'
 import api from '../api'
 

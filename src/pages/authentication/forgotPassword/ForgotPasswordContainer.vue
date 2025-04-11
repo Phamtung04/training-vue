@@ -3,10 +3,14 @@
     class="w-full rounded-xl shadow-[0_2px_15px_3px_rgba(0,0,0,0.07),0_10px_20px_2px_rgba(0,0,0,0.04)] md:mt-0 sm:max-w-md xl:p-0"
     max-width="400"
   >
-    <h3 class="text-center text-4xl font-semibold">Forgot Password</h3>
+    <h3 class="text-center text-4xl font-semibold">
+      {{ t('resetPasswordContainer.reset') }}
+    </h3>
     <p class="text-center font-thin">
-      Remember your password?
-      <router-link to="/login" class="text-blue-400">Login</router-link>
+      {{ t('resetPasswordContainer.rememberYourPassword') }}
+      <router-link to="/login" class="text-blue-400">{{
+        t('resetPasswordContainer.login')
+      }}</router-link>
     </p>
 
     <v-form @submit="onSubmit">
@@ -16,7 +20,7 @@
         class="w-[345px] ml-3"
         color="primary"
         :loading="mutation.isPending.value"
-        >Send</v-btn
+        >{{ t('resetPasswordContainer.continue') }}</v-btn
       >
     </v-form>
   </v-container>
@@ -31,20 +35,19 @@ import { useMutation } from '@tanstack/vue-query'
 import { authService } from '../../../config/apiService/authService'
 import { useAlert } from '../../../composable/useAlert'
 import { VALIDATE_CODES } from '../../../constants/validateCode'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
-
+const { t } = useI18n()
+const { errorNotify } = useAlert()
 const { handleSubmit, setFieldError } = useForm({
   validationSchema: forgotPasswordSchema,
 })
 
-const { errorNotify } = useAlert()
-
 const mutation = useMutation({
   mutationFn: authService.forgotPassword,
-  onSuccess: (dataForgot) => {
+  onSuccess: () => {
     router.push('/password-code')
-    console.log('success', dataForgot)
   },
   onError: (error: any) => {
     const errorMessages = error?.validationErrors || {}
@@ -62,7 +65,6 @@ const mutation = useMutation({
 const onSubmit = handleSubmit((data) => {
   mutation.mutate(data)
   localStorage.setItem('training_vue_token_email', data.email)
-  console.log(data)
 })
 </script>
 

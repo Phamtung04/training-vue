@@ -16,7 +16,7 @@
         v-else
         class="w-32 h-32 bg-gray-200 flex items-center justify-center rounded-full"
       >
-        <span class="text-gray-500">Upload ảnh</span>
+        <span class="text-gray-500">{{ t('updateUserContainer.image') }}</span>
       </div>
     </label>
   </div>
@@ -24,10 +24,11 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const props = defineProps<{ modelValue: File | string | null }>()
 const emit = defineEmits(['update:modelValue'])
-
 const preview = ref<string | null>(null)
 
 watch(

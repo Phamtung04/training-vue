@@ -1,4 +1,3 @@
-// utils/auth.ts
 import { jwtDecode } from 'jwt-decode'
 import { UserPayload } from './config'
 

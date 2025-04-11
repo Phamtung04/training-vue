@@ -39,17 +39,30 @@
         <td>
           <div v-if="option === ROLE.ADMIN.toString()">
             <button
-              class="px-2 mr-2 w-15 text-center py-1 bg-green"
+              class="px-2 mr-2 w-10 text-center py-1 bg-transparent"
               @click="emit('handle-update', user._id)"
             >
-              Edit
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  fill="#0118D8"
+                  d="M2 17V20H10V18.11H3.9V17C3.9 16.36 7.03 14.9 10 14.9C10.96 14.91 11.91 15.04 12.83 15.28L14.35 13.76C12.95 13.29 11.5 13.03 10 13C7.33 13 2 14.33 2 17M10 4C7.79 4 6 5.79 6 8S7.79 12 10 12 14 10.21 14 8 12.21 4 10 4M10 10C8.9 10 8 9.11 8 8S8.9 6 10 6 12 6.9 12 8 11.11 10 10 10M21.7 13.35L20.7 14.35L18.65 12.35L19.65 11.35C19.86 11.14 20.21 11.14 20.42 11.35L21.7 12.63C21.91 12.84 21.91 13.19 21.7 13.4M12 18.94L18.06 12.88L20.11 14.88L14.11 20.95H12V18.94"
+                />
+              </svg>
             </button>
             <button
-              class="px-2 mr-2 w-15 text-center py-1 bg-red"
+              class="px-2 mr-2 w-10 text-center py-1 bg-transparent"
               @click="handleDelete(user._id)"
             >
-              Delete
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  fill="red"
+                  d="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8.46,11.88L9.87,10.47L12,12.59L14.12,10.47L15.53,11.88L13.41,14L15.53,16.12L14.12,17.53L12,15.41L9.88,17.53L8.47,16.12L10.59,14L8.46,11.88M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z"
+                />
+              </svg>
             </button>
+          </div>
+          <div v-else>
+            <p class="text-red-400">{{ t('tableContainer.noPermission') }}</p>
           </div>
         </td>
       </tr>
@@ -57,7 +70,9 @@
   </table>
   <div class="flex justify-end items-center mb-3 mt-5">
     <div>
-      <label for="itemsPerPage"> Số lượng hiển thị:</label>
+      <label for="itemsPerPage">{{
+        t('tableContainer.labelRowsPerPage')
+      }}</label>
       <select
         id="itemsPerPage"
         :value="itemsPerPage"
@@ -76,8 +91,9 @@
       </select>
     </div>
     <div>
-      Hiển thị {{ startItem }} - {{ endItem }} trên tổng số
-      {{ totalItems }} người dùng
+      {{ t('tableContainer.display') }} {{ startItem }} - {{ endItem }}
+      {{ t('tableContainer.of') }} {{ totalItems }}
+      {{ t('tableContainer.user') }}
     </div>
     <div class="flex items-center gap-4">
       <button
@@ -88,7 +104,10 @@
         <
       </button>
 
-      <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+      <span
+        >{{ t('tableContainer.page') }} {{ currentPage }} /
+        {{ totalPages }}</span
+      >
 
       <button
         @click="nextPage"
@@ -102,11 +121,12 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { ROLE } from '../../../constants/enum'
 import { ListUserProps } from './config'
 
 defineProps<ListUserProps>()
-
+const { t } = useI18n()
 const emit = defineEmits([
   'update-page',
   'prev-page',

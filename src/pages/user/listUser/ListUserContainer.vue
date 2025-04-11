@@ -3,26 +3,30 @@
     <CustomTextField
       class="ml-2"
       name="searchUserName"
-      label="Search username"
+      :label="t('searchContainer.searchByUserName')"
       type="text"
       v-model="searchValue.userName"
     />
     <CustomTextField
       class="ml-2"
       name="searchFullName"
-      label="Search fullname"
+      :label="t('searchContainer.searchByFullName')"
       type="text"
       v-model="searchValue.fullName"
     />
     <CustomSelectField
-      class="ml-2"
+      class="ml-2 w-[100px]"
       name="role"
       :item="optionRole"
-      label="Role"
+      :label="t('searchContainer.searchByRole')"
       v-model="searchValue.role"
     />
-    <v-btn class="mb-5 ml-2" color="primary" height="54px" @click="handleSearch"
-      >Search</v-btn
+    <v-btn
+      class="mb-5 ml-2"
+      color="primary"
+      height="54px"
+      @click="handleSearch"
+      >{{ t('searchContainer.buttonSearch') }}</v-btn
     >
   </v-form>
 
@@ -70,13 +74,14 @@ import { useAlert } from '../../../composable/useAlert'
 import { VALIDATE_CODES } from '../../../constants/validateCode'
 import { getUserInfo } from '../../../composable/useUserToken/useUserToken'
 import UpdateUserContainer from '../updateUser/UpdateUserContainer.vue'
+import { useI18n } from 'vue-i18n'
 
 const { successNotify, errorNotify, confirm } = useAlert()
 const sortBy = ref<string>('')
 const sortDirection = ref<'ASC' | 'DESC'>('ASC')
-const user = getUserInfo()
-
-const option = user?.role
+const userToken = getUserInfo()
+const { t } = useI18n()
+const option = userToken?.role
 const itemsPerPage = ref(5)
 const perPageOptions = ref([5, 10, 15, 20])
 const currentPage = ref(1)
@@ -89,9 +94,9 @@ const selectedUserId = ref('')
 const selectedUser = ref({})
 
 const optionRole = [
-  { label: 'All', value: '' },
-  { label: 'Admin', value: ROLE.ADMIN },
-  { label: 'User', value: ROLE.USER },
+  { label: t('searchContainer.all'), value: '' },
+  { label: t('searchContainer.admin'), value: ROLE.ADMIN },
+  { label: t('searchContainer.user'), value: ROLE.USER },
 ]
 
 const {
@@ -123,13 +128,13 @@ const {
   refetchOnWindowFocus: false,
 })
 
-const headers = ref([
-  { value: 'userName', sortable: true, text: 'Username' },
-  { value: 'fullName', sortable: true, text: 'Fullname' },
-  { value: 'dob', sortable: true, text: 'Birthday' },
-  { value: 'email', sortable: true, text: 'Email' },
-  { value: 'Role', sortable: false, text: 'Role' },
-  { value: 'Actions', sortable: false, text: 'Actions' },
+const headers = computed(() => [
+  { value: 'userName', sortable: true, text: t('tableContainer.userName') },
+  { value: 'fullName', sortable: true, text: t('tableContainer.fullName') },
+  { value: 'dob', sortable: true, text: t('tableContainer.birthday') },
+  { value: 'email', sortable: true, text: t('tableContainer.email') },
+  { value: 'Role', sortable: false, text: t('tableContainer.role') },
+  { value: 'Actions', sortable: false, text: t('tableContainer.action') },
 ])
 
 const totalPages = computed(() =>
@@ -138,7 +143,7 @@ const totalPages = computed(() =>
 
 const displayedUsers = computed(() =>
   users.value
-    .filter((users) => users._id !== user?._id)
+    .filter((users) => users._id !== userToken?._id)
     .map((user) => ({
       ...user,
       dob: formatDate(user.dob),
@@ -195,7 +200,6 @@ const { mutate: deleteUser } = useMutation({
     await userService.deleteUser({ id })
   },
   onSuccess: () => {
-    console.log('User deleted successfully')
     refetch()
   },
   onError: (error) => {
@@ -204,9 +208,7 @@ const { mutate: deleteUser } = useMutation({
 })
 
 const handleDelete = async (id: string) => {
-  console.log('Delete user with id:', id)
-
-  const isOk = await confirm('Bạn có chắc muốn xóa người dùng này không?')
+  const isOk = await confirm(t('actionContainer.message'))
 
   if (isOk) {
     try {

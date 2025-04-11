@@ -3,19 +3,21 @@
     class="w-full rounded-xl shadow-[0_2px_15px_3px_rgba(0,0,0,0.07),0_10px_20px_2px_rgba(0,0,0,0.04)] md:mt-0 sm:max-w-md xl:p-0"
     max-width="400"
   >
-    <h3 class="text-center text-4xl font-semibold">Password Code</h3>
+    <h3 class="text-center text-4xl font-semibold">
+      {{ t('passCodeContainer.passwordCode') }}
+    </h3>
     <v-form @submit="onSubmit">
       <PasswordCode />
       <div class="flex justify-end mr-3">
-        <v-btn class="w-[100px] ml-3" color="primary" @click="onSubmitCancel"
-          >Cancel</v-btn
-        >
+        <v-btn class="w-[100px] ml-3" color="primary" @click="onSubmitCancel">{{
+          t('passCodeContainer.cancel')
+        }}</v-btn>
         <v-btn
           class="w-[100px] ml-3"
           color="primary"
           type="submit"
           :loading="mutation.isPending.value"
-          >Send</v-btn
+          >{{ t('passCodeContainer.continue') }}</v-btn
         >
       </div>
     </v-form>
@@ -31,8 +33,10 @@ import { useMutation } from '@tanstack/vue-query'
 import { authService } from '../../../config/apiService/authService'
 import { useAlert } from '../../../composable/useAlert'
 import { VALIDATE_CODES } from '../../../constants/validateCode'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
+const { t } = useI18n()
 
 const { handleSubmit, setFieldError } = useForm({
   validationSchema: passwordCodeSchema,
@@ -50,7 +54,6 @@ const mutation = useMutation({
   onError: (error: any) => {
     const errorMessages = error?.validationErrors || {}
     errorNotify(VALIDATE_CODES.I0002)
-    console.log('error', errorMessages)
 
     errorMessages.forEach(
       ({ field, message }: { field: string; message: string }) => {

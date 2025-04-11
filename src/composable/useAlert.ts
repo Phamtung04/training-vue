@@ -1,11 +1,12 @@
-// src/composables/useAlert.ts
 import Swal from 'sweetalert2'
+import { useI18n } from 'vue-i18n'
 
 export const useAlert = () => {
+  const { t } = useI18n()
   const successNotify = (message: string) => {
     Swal.fire({
       icon: 'success',
-      title: 'Thành công!',
+      title: t('actionContainer.successes'),
       text: message,
       timer: 1500,
       showConfirmButton: false,
@@ -15,19 +16,19 @@ export const useAlert = () => {
   const errorNotify = (message: string) => {
     Swal.fire({
       icon: 'error',
-      title: 'Thất bại!',
+      title: t('actionContainer.error'),
       text: message,
     })
   }
 
   const confirm = async (message: string) => {
     const result = await Swal.fire({
-      title: 'Xác nhận',
+      title: t('actionContainer.confirm'),
       text: message,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Đồng ý',
-      cancelButtonText: 'Hủy',
+      confirmButtonText: t('actionContainer.apply'),
+      cancelButtonText: t('actionContainer.cancel'),
     })
     return result.isConfirmed
   }

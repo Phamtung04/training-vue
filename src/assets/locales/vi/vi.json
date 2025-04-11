@@ -1,0 +1,106 @@
+{
+  "loginContainer": {
+    "email": "Tài khoản:",
+    "password": "Mật khẩu:",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "ifYouHaveAlreadyAccount": "Nếu bạn chưa có tài khoản?",
+    "forgetYourPassword": "Quên mật khẩu?"
+  },
+
+  "resetPasswordContainer": {
+    "reset": "Đặt lại mật khẩu",
+    "login": "Đăng nhập",
+    "cancel": "Hủy",
+    "continue": "Tiếp tục",
+    "rememberYourPassword": "Đã nhớ mật khẩu của bạn?"
+  },
+
+  "passCodeContainer": {
+    "passCode": "Nhập mã",
+    "cancel": "Hủy",
+    "continue": "Tiếp tục",
+    "passwordCode": "Mã xác nhận"
+  },
+
+  "registerContainer": {
+    "email": "email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "register": "Đăng ký",
+    "login": "Đăng nhập",
+    "userName": "Tên người dùng",
+    "fullName": "Họ tên",
+    "phone": "Sđt",
+    "role": "Vai trò",
+    "gender": "Giới tính",
+    "birthday": "Ngày sinh",
+    "male": "Nam",
+    "female": "Nữ",
+    "admin": "Quản trị viên",
+    "user": "Nhân viên",
+    "ifYouHaveAlreadyAccount": "Nếu bạn đã có tài khoản?"
+  },
+
+  "menuContainer": {
+    "logout": "Đăng xuất",
+    "listUser": "Danh sách",
+    "order": "Đặt hàng"
+  },
+
+  "searchContainer": {
+    "searchByUserName": "Tìm theo tên tài khoản",
+    "searchByFullName": "Tìm theo họ tên",
+    "searchByRole": "Vai trò",
+    "buttonSearch": "Tìm kiếm",
+    "all": "Tất cả",
+    "admin": "Quản trị viên",
+    "user": "Nhân viên"
+  },
+
+  "tableContainer": {
+    "userName": "Tên tài khoản",
+    "fullName": "Họ và tên",
+    "role": "Vai trò",
+    "birthday": "Ngày sinh",
+    "email": "Email",
+    "action": "Hành động",
+    "noPermission": "Không có quyền",
+    "noData": "Không có dữ liệu",
+    "labelRowsPerPage": "Số dòng mỗi trang:",
+    "of": "Trên",
+    "display": "Hiển thị",
+    "update": "Cập nhật",
+    "user": "người dùng",
+    "page": "Trang",
+    "delete": "Xóa"
+  },
+
+  "updateUserContainer": {
+    "email": "email:",
+    "userName": "Tên người dùng:",
+    "fullName": "Họ và tên:",
+    "phone": "Sđt:",
+    "role": "Vai trò:",
+    "gender": "Giới tính:",
+    "birthday": "Ngày sinh:",
+    "male": "Nam",
+    "female": "Nữ",
+    "admin": "Quản trị viên",
+    "user": "Nhân viên",
+    "description": "Mô tả",
+    "update": "Cập nhật",
+    "cancel": "Hủy",
+    "image": "Tải ảnh lên"
+  },
+
+  "actionContainer": {
+    "successes": "Thành công",
+    "error": "Thất bại",
+    "confirm": "Xác nhận",
+    "apply": "Đồng ý",
+    "cancel": "Hủy",
+    "message": "Bạn có chắc chắn muốn xóa người dùng này không?",
+    "title": "Xóa người dùng"
+  }
+}
