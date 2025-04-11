@@ -33,26 +33,46 @@ const { value: field, errorMessage } = useField(() => props.name!)
 
 const onInput = (e: Event) => {
   const inputValue = (e.target as HTMLInputElement).value
-  emit('update:modelValue', inputValue)
+  let newValue = inputValue
 
-  if (props.trimOnInput && typeof field.value === 'string') {
-    field.value = inputValue.trim()
-  } else {
-    field.value = inputValue
+  if (props.trimOnInput && typeof newValue === 'string') {
+    newValue = newValue.trim()
   }
+
+  field.value = newValue
+  emit('update:modelValue', newValue)
 }
 
 const handleBlur = () => {
   if (props.trimOnBlur && typeof field.value === 'string') {
-    field.value = field.value.trim()
+    const trimmedValue = field.value.trim()
+    field.value = trimmedValue
+    emit('update:modelValue', trimmedValue)
   }
 }
+
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (newValue !== field.value) {
+      field.value = newValue
+    }
+  }
+)
 
 watch(
   () => field.value,
   (newValue) => {
     if (typeof newValue === 'string' && props.trimOnBlur) {
-      field.value = newValue.trim()
+      const trimmedValue = newValue.trim()
+      if (trimmedValue !== newValue) {
+        field.value = trimmedValue
+        emit('update:modelValue', trimmedValue)
+      } else if (trimmedValue !== props.modelValue) {
+        emit('update:modelValue', trimmedValue)
+      }
+    } else if (newValue !== props.modelValue) {
+      emit('update:modelValue', newValue)
     }
   }
 )
