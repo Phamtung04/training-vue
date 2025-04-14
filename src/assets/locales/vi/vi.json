@@ -1,7 +1,7 @@
 {
   "loginContainer": {
-    "email": "Tài khoản:",
-    "password": "Mật khẩu:",
+    "email": "Tài khoản",
+    "password": "Mật khẩu",
     "login": "Đăng nhập",
     "register": "Đăng ký",
     "ifYouHaveAlreadyAccount": "Nếu bạn chưa có tài khoản?",
@@ -77,13 +77,13 @@
   },
 
   "updateUserContainer": {
-    "email": "email:",
-    "userName": "Tên người dùng:",
-    "fullName": "Họ và tên:",
-    "phone": "Sđt:",
-    "role": "Vai trò:",
-    "gender": "Giới tính:",
-    "birthday": "Ngày sinh:",
+    "email": "email",
+    "userName": "Tên người dùng",
+    "fullName": "Họ và tên",
+    "phone": "Sđt",
+    "role": "Vai trò",
+    "gender": "Giới tính",
+    "birthday": "Ngày sinh",
     "male": "Nam",
     "female": "Nữ",
     "admin": "Quản trị viên",

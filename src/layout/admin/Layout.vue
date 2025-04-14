@@ -1,7 +1,8 @@
 <template>
-  <v-layout class="rounded-md border">
+  <v-layout class="rounded-md">
     <Header />
     <NavBar />
+
     <v-main class="d-flex align-center justify-center">
       <v-container>
         <router-view />

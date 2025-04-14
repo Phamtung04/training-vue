@@ -25,9 +25,9 @@
   },
 
   "registerContainer": {
-    "email": "email:",
-    "password": "Password:",
-    "confirmPassword": "Password confirmation:",
+    "email": "email",
+    "password": "Password",
+    "confirmPassword": "Password confirmation",
     "register": "Register",
     "login": "Login",
     "userName": "UserName",
@@ -78,13 +78,13 @@
   },
 
   "updateUserContainer": {
-    "email": "email:",
-    "userName": "userName:",
-    "fullName": "fullName:",
-    "phone": "PhoneNumber:",
-    "role": "Role:",
+    "email": "email",
+    "userName": "userName",
+    "fullName": "fullName",
+    "phone": "PhoneNumber",
+    "role": "Role",
     "gender": "Gender",
-    "birthday": "Birthday:",
+    "birthday": "Birthday",
     "male": "Male",
     "female": "Female",
     "admin": "Admin",

@@ -17,19 +17,19 @@ export const userService = {
     queryParams.append('direction', direction)
 
     return api.post(
-      `${API_PATH.USER.LIST_USER}?${queryParams.toString()}`,
+      `${API_PATH.USER_API.LIST_USER_API}?${queryParams.toString()}`,
       data
     )
   },
   updateUser: (data: any) => {
-    return api.post(API_PATH.USER.UPDATE_USER, data, {
+    return api.post(API_PATH.USER_API.UPDATE_USER_API, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
   deleteUser: (data: any) => {
-    return api.post(API_PATH.USER.DELETE_USER, data)
+    return api.post(API_PATH.USER_API.DELETE_USER_API, data)
   },
   getUserById: (data: any) => {
-    return api.post(API_PATH.USER.GET_USER_BY_ID, data)
+    return api.post(API_PATH.USER_API.GET_USER_BY_ID_API, data)
   },
 }

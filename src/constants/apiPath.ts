@@ -1,14 +1,14 @@
 export const API_PATH = {
-  AUTH: {
-    REGISTER: '/users/create',
-    LOGIN: '/auth/login',
-    FORGOT_PASSWORD: '/auth/forgot-password',
-    CONFIRM_PASSWORD: '/auth/confirm-password-code',
+  AUTH_API: {
+    REGISTER_API: '/users/create',
+    LOGIN_API: '/auth/login',
+    FORGOT_PASSWORD_API: '/auth/forgot-password',
+    CONFIRM_PASSWORD_API: '/auth/confirm-password-code',
   },
-  USER: {
-    LIST_USER: '/users/list',
-    UPDATE_USER: '/users/update',
-    DELETE_USER: '/users/delete',
-    GET_USER_BY_ID: '/users/detail',
+  USER_API: {
+    LIST_USER_API: '/users/list',
+    UPDATE_USER_API: '/users/update',
+    DELETE_USER_API: '/users/delete',
+    GET_USER_BY_ID_API: '/users/detail',
   },
 }
