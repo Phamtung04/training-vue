@@ -1,11 +1,10 @@
 <template>
   <v-responsive class="mx-auto" max-width="500">
     <v-text-field
-      :model-value="modelValue"
+      v-model="field"
       :type="props.type"
       :label="props.label"
       :error-messages="errorMessage"
-      @input="onInput"
       @blur="handleBlur"
       :disabled="props.disabled"
     ></v-text-field>
@@ -17,7 +16,7 @@ import { useField } from 'vee-validate'
 import { watch } from 'vue'
 
 const props = defineProps({
-  name: String,
+  name: { type: String, required: true },
   label: String,
   type: { type: String, default: 'text' },
   errorMessage: String,
@@ -31,49 +30,34 @@ const emit = defineEmits(['update:modelValue'])
 
 const { value: field, errorMessage } = useField(() => props.name!)
 
-const onInput = (e: Event) => {
-  const inputValue = (e.target as HTMLInputElement).value
-  let newValue = inputValue
-
-  if (props.trimOnInput && typeof newValue === 'string') {
-    newValue = newValue.trim()
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (newVal !== field.value) {
+      field.value = newVal
+    }
   }
+)
 
-  field.value = newValue
-  emit('update:modelValue', newValue)
-}
+watch(field, (newVal) => {
+  emit('update:modelValue', newVal)
+})
 
 const handleBlur = () => {
   if (props.trimOnBlur && typeof field.value === 'string') {
-    const trimmedValue = field.value.trim()
-    field.value = trimmedValue
-    emit('update:modelValue', trimmedValue)
+    const trimmed = field.value.trim()
+    if (trimmed !== field.value) {
+      field.value = trimmed
+    }
   }
 }
 
-watch(
-  () => props.modelValue,
-  (newValue) => {
-    if (newValue !== field.value) {
-      field.value = newValue
+watch(field, (val, _) => {
+  if (props.trimOnInput && typeof val === 'string') {
+    const trimmed = val.trim()
+    if (trimmed !== val) {
+      field.value = trimmed
     }
   }
-)
-
-watch(
-  () => field.value,
-  (newValue) => {
-    if (typeof newValue === 'string' && props.trimOnBlur) {
-      const trimmedValue = newValue.trim()
-      if (trimmedValue !== newValue) {
-        field.value = trimmedValue
-        emit('update:modelValue', trimmedValue)
-      } else if (trimmedValue !== props.modelValue) {
-        emit('update:modelValue', trimmedValue)
-      }
-    } else if (newValue !== props.modelValue) {
-      emit('update:modelValue', newValue)
-    }
-  }
-)
+})
 </script>

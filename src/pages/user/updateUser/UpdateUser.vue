@@ -37,7 +37,7 @@
     <div class="flex">
       <CustomTextField
         class="mb-3 w-[80px]"
-        :model-value="dayjs(dobValue).format('YYYY-MM-DD') || dobValue"
+        :model-value="formattedDob"
         name="dob"
         :label="t('updateUserContainer.birthday')"
         type="date"
@@ -84,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import CustomSelectField from '../../../components/textField/CustomSelectField.vue'
 import CustomTextField from '../../../components/textField/CustomTextField.vue'
 import { GENDER, ROLE } from '../../../constants/enum'
@@ -120,6 +120,20 @@ const dobValue = computed({
   get: () => props.values.dob,
   set: (value) => props.setFieldValue('dob', value),
 })
+
+watch(
+  () => props.values.dob,
+  (newDob) => {
+    if (newDob) {
+      props.setFieldValue('dob', dayjs(newDob).format('YYYY-MM-DD'))
+    }
+  },
+  { immediate: true }
+)
+
+const formattedDob = computed(() =>
+  dobValue.value ? dayjs(dobValue.value).format('YYYY-MM-DD') : ''
+)
 
 const updateGender = (value: any) => {
   props.setFieldValue('gender', value)
