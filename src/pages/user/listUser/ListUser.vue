@@ -73,22 +73,41 @@
       <label for="itemsPerPage">{{
         t('tableContainer.labelRowsPerPage')
       }}</label>
-      <select
-        id="itemsPerPage"
-        :value="itemsPerPage"
-        class="ml-2 p-1 border rounded w-10"
-        @change="
-          handleItemsPerPageChange(($event.target as HTMLSelectElement)?.value)
-        "
-      >
-        <option
-          v-for="(option, index) in perPageOptions"
-          :key="index"
-          :value="option"
+      <div class="ml-2 relative inline-block justify-between">
+        <select
+          id="itemsPerPage"
+          :value="itemsPerPage"
+          class="border rounded w-10"
+          @change="
+            handleItemsPerPageChange(
+              ($event.target as HTMLSelectElement)?.value
+            )
+          "
         >
-          {{ option }}
-        </option>
-      </select>
+          <option
+            v-for="(option, index) in perPageOptions"
+            :key="index"
+            :value="option"
+          >
+            {{ option }}
+          </option>
+        </select>
+        <div
+          class="pointer-events-none absolute inset-y-0 right-1 flex items-center text-gray-700"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
     </div>
     <div>
       {{ t('tableContainer.display') }} {{ startItem }} - {{ endItem }}

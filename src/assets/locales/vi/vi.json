@@ -55,7 +55,8 @@
     "buttonSearch": "Tìm kiếm",
     "all": "Tất cả",
     "admin": "Quản trị viên",
-    "user": "Nhân viên"
+    "user": "Nhân viên",
+    "buttonClear": "Xóa"
   },
 
   "tableContainer": {

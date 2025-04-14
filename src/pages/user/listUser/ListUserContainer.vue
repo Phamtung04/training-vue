@@ -22,11 +22,18 @@
       v-model="searchValue.role"
     />
     <v-btn
-      class="mb-5 ml-2"
+      class="mb-5 ml-2 w-26"
       color="primary"
       height="54px"
       @click="handleSearch"
       >{{ t('searchContainer.buttonSearch') }}</v-btn
+    >
+    <v-btn
+      class="mb-5 ml-2 w-26"
+      color="error"
+      height="54px"
+      @click="handleClearSearch"
+      >{{ t('searchContainer.buttonClear') }}</v-btn
     >
   </v-form>
 
@@ -93,11 +100,11 @@ const isShowUpdate = ref(false)
 const selectedUserId = ref('')
 const selectedUser = ref({})
 
-const optionRole = [
+const optionRole = computed(() => [
   { label: t('searchContainer.all'), value: '' },
   { label: t('searchContainer.admin'), value: ROLE.ADMIN },
   { label: t('searchContainer.user'), value: ROLE.USER },
-]
+])
 
 const {
   data: userList,
@@ -222,6 +229,20 @@ const handleDelete = async (id: string) => {
 
 const handleSearch = () => {
   appliedSearchValue.value = { ...searchValue.value }
+
+  sortBy.value = ''
+  sortDirection.value = 'ASC'
+
+  currentPage.value = 1
+}
+
+const handleClearSearch = () => {
+  searchValue.value = { userName: '', fullName: '', role: '' }
+  appliedSearchValue.value = { ...searchValue.value }
+
+  sortBy.value = ''
+  sortDirection.value = 'ASC'
+
   currentPage.value = 1
 }
 </script>

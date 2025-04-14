@@ -56,7 +56,8 @@
     "buttonSearch": "Search",
     "all": "All",
     "admin": "Admin",
-    "user": "User"
+    "user": "User",
+    "buttonClear": "Clear"
   },
 
   "tableContainer": {
