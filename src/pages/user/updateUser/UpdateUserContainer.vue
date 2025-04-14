@@ -18,14 +18,14 @@
               />
               <div class="d-flex justify-end">
                 <v-btn
-                  text="Close"
+                  :text="t('updateUserContainer.cancel')"
                   variant="plain"
                   @click="closeDialog"
                 ></v-btn>
                 <v-btn
                   color="primary"
                   type="submit"
-                  text="Save"
+                  :text="t('updateUserContainer.update')"
                   variant="tonal"
                   :loading="updateMutation.isPending.value"
                 ></v-btn>

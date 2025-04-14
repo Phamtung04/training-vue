@@ -17,17 +17,17 @@
 
       <v-list>
         <v-container>
-          <div v-for="(item, index) in items" :key="index" :value="index">
-            <div class="flex items-center w-58">
-              <v-avatar color="brown" size="large">
-                <v-img alt="John" :src="item.avatar"></v-img>
-              </v-avatar>
-              <v-list-item-title class="ml-3">{{
-                item.email
-              }}</v-list-item-title>
-            </div>
-            <v-btn class="mt-3" @click="handleClick">{{ item.title }}</v-btn>
+          <div class="flex items-center w-58">
+            <v-avatar color="brown" size="large">
+              <v-img :alt="items.userName" :src="items.avatar"></v-img>
+            </v-avatar>
+            <v-list-item-title class="ml-3">{{
+              items.email
+            }}</v-list-item-title>
           </div>
+          <v-btn class="mt-3" @click="handleClick">{{
+            t('menuContainer.logout')
+          }}</v-btn>
         </v-container>
       </v-list>
     </v-menu>
@@ -45,15 +45,13 @@ const router = useRouter()
 const userToken = getUserInfo()
 const BASE_URL = import.meta.env.VITE_BASE_URL_IMAGE
 
-const items = computed(() => [
-  {
-    avatar: userToken?.avatar
-      ? `${BASE_URL}${userToken.avatar}`
-      : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuDyMe5CIk86B4cEY1L_gpvJZa7j3vWcJp8w&s',
-    email: userToken.email,
-    title: t('menuContainer.logout'),
-  },
-])
+const items = computed(() => ({
+  avatar: userToken?.avatar
+    ? `${BASE_URL}${userToken.avatar}`
+    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuDyMe5CIk86B4cEY1L_gpvJZa7j3vWcJp8w&s',
+  email: userToken.email,
+  userName: userToken.userName,
+}))
 
 const handleClick = () => {
   localStorage.removeItem('training_vue_token_access')
