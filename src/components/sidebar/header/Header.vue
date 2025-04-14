@@ -1,6 +1,6 @@
 <template>
-  <v-app-bar :title="t('menuContainer.listUser')"
-    ><Avatar /> <Language
+  <v-app-bar :title="t('menuContainer.listUser')">
+    <Avatar /> <Language
   /></v-app-bar>
 </template>
 

@@ -84,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed, watchEffect } from 'vue'
 import CustomSelectField from '../../../components/textField/CustomSelectField.vue'
 import CustomTextField from '../../../components/textField/CustomTextField.vue'
 import { GENDER, ROLE } from '../../../constants/enum'
@@ -121,15 +121,11 @@ const dobValue = computed({
   set: (value) => props.setFieldValue('dob', value),
 })
 
-watch(
-  () => props.values.dob,
-  (newDob) => {
-    if (newDob) {
-      props.setFieldValue('dob', dayjs(newDob).format('YYYY-MM-DD'))
-    }
-  },
-  { immediate: true }
-)
+watchEffect(() => {
+  if (props.values.dob) {
+    props.setFieldValue('dob', dayjs(props.values.dob).format('YYYY-MM-DD'))
+  }
+})
 
 const formattedDob = computed(() =>
   dobValue.value ? dayjs(dobValue.value).format('YYYY-MM-DD') : ''

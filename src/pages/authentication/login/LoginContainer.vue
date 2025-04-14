@@ -61,14 +61,13 @@ const mutate = useMutation({
   },
   onError: (error: any) => {
     const errorMessages = error?.validationErrors || {}
-    errorNotify(VALIDATE_CODES.I0003)
+    errorNotify(error.response.data.message || VALIDATE_CODES.I0003)
 
     errorMessages.forEach(
       ({ field, message }: { field: string; message: string }) => {
         setFieldError(field, message)
       }
     )
-    console.log('error', error)
   },
 })
 

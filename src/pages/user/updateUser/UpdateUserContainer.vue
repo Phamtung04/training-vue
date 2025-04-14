@@ -59,11 +59,11 @@ const { handleSubmit, values, setFieldValue, setFieldError } = useForm({
   validationSchema: updateSchema,
 })
 
-const { data: userData, refetch } = useQuery({
+const { data: userData } = useQuery({
   queryKey: ['user', props.id],
   queryFn: () => userService.getUserById({ id: props.id }),
   select: (response) => response.data?.data,
-  enabled: computed(() => !!props.id),
+  enabled: computed(() => !!props.id && dialogVisible.value),
   staleTime: 0,
 })
 const queryClient = useQueryClient()
@@ -79,7 +79,7 @@ const updateMutation = useMutation({
     emit('close')
   },
   onError: (error: any) => {
-    errorNotify(VALIDATE_CODES.I0002)
+    errorNotify(error.response.data.message || VALIDATE_CODES.I0002)
     const errorMessages = error?.validationErrors || {}
     errorMessages.forEach(
       ({ field, message }: { field: string; message: string }) => {
@@ -88,12 +88,6 @@ const updateMutation = useMutation({
     )
     console.log(error)
   },
-})
-
-watchEffect(() => {
-  if (props.id) {
-    refetch()
-  }
 })
 
 watchEffect(() => {

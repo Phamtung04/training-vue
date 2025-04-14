@@ -53,7 +53,7 @@ const mutation = useMutation({
   },
   onError: (error: any) => {
     const errorMessages = error?.validationErrors || {}
-    errorNotify(VALIDATE_CODES.I0002)
+    errorNotify(error.response.data.message || VALIDATE_CODES.I0002)
 
     errorMessages.forEach(
       ({ field, message }: { field: string; message: string }) => {

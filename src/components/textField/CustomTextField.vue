@@ -7,7 +7,7 @@
       :error-messages="errorMessage"
       @blur="handleBlur"
       :disabled="props.disabled"
-    ></v-text-field>
+    />
   </v-responsive>
 </template>
 
@@ -40,6 +40,13 @@ watch(
 )
 
 watch(field, (newVal) => {
+  if (props.trimOnInput && typeof newVal === 'string') {
+    const trimmed = newVal.trim()
+    if (trimmed !== newVal) {
+      field.value = trimmed
+      return
+    }
+  }
   emit('update:modelValue', newVal)
 })
 
@@ -51,13 +58,4 @@ const handleBlur = () => {
     }
   }
 }
-
-watch(field, (val, _) => {
-  if (props.trimOnInput && typeof val === 'string') {
-    const trimmed = val.trim()
-    if (trimmed !== val) {
-      field.value = trimmed
-    }
-  }
-})
 </script>

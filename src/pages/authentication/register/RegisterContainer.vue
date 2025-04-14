@@ -8,7 +8,7 @@
     </h3>
 
     <v-form @submit="onSubmit" class="w-[370px] mx-auto">
-      <div class="mx-auto mt-5 h-96 overflow-y-auto scrollbar-hide">
+      <div class="mx-auto mt-5 h-96 overflow-y-auto">
         <Register
           :values="values"
           :setFieldValue="setFieldValue"
