@@ -150,13 +150,11 @@ const totalPages = computed(() =>
 )
 
 const displayedUsers = computed(() =>
-  users.value
-    // .filter((users) => users._id !== userToken?._id)
-    .map((user) => ({
-      ...user,
-      dob: formatDate(user.dob),
-      role: user.role === ROLE.ADMIN.toString() ? 'Admin' : 'User',
-    }))
+  users.value.map((user) => ({
+    ...user,
+    dob: formatDate(user.dob),
+    role: user.role === ROLE.ADMIN.toString() ? 'Admin' : 'User',
+  }))
 )
 
 const startItem = computed(

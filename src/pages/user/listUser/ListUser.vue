@@ -89,71 +89,71 @@
         </tr>
       </tbody>
     </table>
-  </div>
 
-  <div class="flex justify-end items-center mb-3 mt-5">
-    <div class="mr-5">
-      <label for="itemsPerPage">{{
-        t('tableContainer.labelRowsPerPage')
-      }}</label>
-      <div class="ml-2 relative inline-block justify-between">
-        <select
-          id="itemsPerPage"
-          :value="itemsPerPage"
-          class="rounded w-10 focus:outline-none"
-          @change="
-            handleItemsPerPageChange(
-              ($event.target as HTMLSelectElement)?.value
-            )
-          "
-        >
-          <option
-            v-for="(option, index) in perPageOptions"
-            :key="index"
-            :value="option"
+    <div class="flex justify-end items-center mb-3 mt-5">
+      <div class="mr-5">
+        <label for="itemsPerPage">{{
+          t('tableContainer.labelRowsPerPage')
+        }}</label>
+        <div class="ml-2 relative inline-block justify-between">
+          <select
+            id="itemsPerPage"
+            :value="itemsPerPage"
+            class="rounded w-10 focus:outline-none"
+            @change="
+              handleItemsPerPageChange(
+                ($event.target as HTMLSelectElement)?.value
+              )
+            "
           >
-            {{ option }}
-          </option>
-        </select>
-        <div
-          class="pointer-events-none absolute inset-y-0 right-1 flex items-center text-gray-700"
-        >
-          <svg
-            class="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            <option
+              v-for="(option, index) in perPageOptions"
+              :key="index"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-1 flex items-center text-gray-700"
           >
-            <path d="M19 9l-7 7-7-7" />
-          </svg>
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="mr-4">
-      {{ startItem }} - {{ endItem }} {{ t('tableContainer.of') }}
-      {{ totalItems }}
-    </div>
-    <div class="flex items-center">
-      <button
-        @click="prevPage"
-        :disabled="currentPage === 1"
-        class="px-3 py-2 bg-gray-300 rounded disabled:opacity-50"
-      >
-        <
-      </button>
-
-      <span> {{ currentPage }} / {{ totalPages }}</span>
-
-      <button
-        @click="nextPage"
-        :disabled="currentPage === totalPages"
-        class="px-3 py-2 bg-gray-300 rounded disabled:opacity-50"
-      >
+      <div class="mr-4">
+        {{ startItem }} - {{ endItem }} {{ t('tableContainer.of') }}
+        {{ totalItems }}
+      </div>
+      <div class="flex items-center">
+        <button
+          @click="prevPage"
+          :disabled="currentPage === 1"
+          class="px-3 py-2 bg-gray-300 rounded disabled:opacity-50"
         >
-      </button>
+          <
+        </button>
+
+        <span> {{ currentPage }} / {{ totalPages }}</span>
+
+        <button
+          @click="nextPage"
+          :disabled="currentPage === totalPages"
+          class="px-3 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
+          >
+        </button>
+      </div>
     </div>
   </div>
 </template>
