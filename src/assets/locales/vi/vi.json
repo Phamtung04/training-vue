@@ -72,7 +72,8 @@
     "of": "Trên",
     "display": "Hiển thị",
     "update": "Cập nhật",
-    "user": "người dùng",
+    "user": "Nhân viên",
+    "admin": "Quản trị viên",
     "page": "Trang",
     "delete": "Xóa",
     "deleteNotify": "Không được xóa người dùng này."

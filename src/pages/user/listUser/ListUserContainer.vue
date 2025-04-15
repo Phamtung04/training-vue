@@ -39,7 +39,7 @@
 
   <ListUser
     :headers="headers"
-    :displayedUsers="isLoading ? [] : displayedUsers"
+    :displayedUsers="displayedUsers"
     :itemsPerPage="itemsPerPage"
     :perPageOptions="perPageOptions"
     :currentPage="currentPage"
@@ -52,13 +52,14 @@
     :handleDelete="handleDelete"
     :sortBy="sortBy"
     :sortDirection="sortDirection"
+    :userToken="userToken"
     @update-page="updatePage"
     @prev-page="prevPage"
     @next-page="nextPage"
     @update-items-per-page="handleUpdateItemsPerPage"
     @sort="handleSort"
     @handle-update="handleUpdate"
-    :userToken="userToken"
+    :isLoading="isLoading"
   />
 
   <UpdateUserContainer
@@ -153,7 +154,10 @@ const displayedUsers = computed(() =>
   users.value.map((user) => ({
     ...user,
     dob: formatDate(user.dob),
-    role: user.role === ROLE.ADMIN.toString() ? 'Admin' : 'User',
+    role:
+      user.role === ROLE.ADMIN.toString()
+        ? t('tableContainer.admin')
+        : t('tableContainer.user'),
   }))
 )
 

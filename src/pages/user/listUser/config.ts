@@ -24,4 +24,5 @@ export interface ListUserProps {
   sortBy: string
   sortDirection: 'ASC' | 'DESC'
   userToken: any
+  isLoading: boolean
 }

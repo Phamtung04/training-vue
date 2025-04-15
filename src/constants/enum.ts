@@ -1,9 +1,9 @@
 export const GENDER = {
-  MALE: 1,
-  FEMALE: 2,
+  MALE: '1',
+  FEMALE: '2',
 }
 
 export const ROLE = {
-  ADMIN: 1,
-  USER: 2,
+  ADMIN: '1',
+  USER: '2',
 }

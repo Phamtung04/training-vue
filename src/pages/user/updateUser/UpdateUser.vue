@@ -101,18 +101,12 @@ const props = defineProps<{
 }>()
 
 const genderValue = computed({
-  get: () =>
-    props.values.gender == GENDER.MALE
-      ? t('registerContainer.male')
-      : t('registerContainer.female'),
+  get: () => props.values.gender,
   set: (value) => props.setFieldValue('gender', value),
 })
 
 const roleValue = computed({
-  get: () =>
-    props.values.role == ROLE.ADMIN
-      ? t('registerContainer.admin')
-      : t('registerContainer.user'),
+  get: () => props.values.role,
   set: (value) => props.setFieldValue('role', value),
 })
 
