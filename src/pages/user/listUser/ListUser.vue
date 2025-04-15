@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#f1f1f1]">
+  <div class="bg-[#f1f1f1] rounded-lg overflow-hidden">
     <table>
       <thead>
         <tr class="h-10">
@@ -9,10 +9,7 @@
             class="w-40 text-center cursor-pointer"
             @click="handleHeaderClick(header)"
           >
-            <div
-              class="flex items-center justify-center h-16"
-              style="background-color: #9810fa"
-            >
+            <div class="flex items-center bg-[#9810fa] justify-center h-16">
               {{ header.text }}
               <span v-if="header.sortable" class="ml-1">
                 <span v-if="sortBy === header.value && sortDirection === 'ASC'">
