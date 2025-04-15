@@ -1,5 +1,5 @@
 <template>
-  <v-form class="flex items-center mt-10 mb-5">
+  <v-form class="flex items-center mt-2 mb-5">
     <CustomTextField
       class="ml-2"
       name="searchUserName"
