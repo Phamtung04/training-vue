@@ -23,4 +23,5 @@ export interface ListUserProps {
   handleDelete: (id: string) => void
   sortBy: string
   sortDirection: 'ASC' | 'DESC'
+  userToken: any
 }

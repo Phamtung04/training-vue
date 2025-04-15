@@ -74,7 +74,8 @@
     "update": "Cập nhật",
     "user": "người dùng",
     "page": "Trang",
-    "delete": "Xóa"
+    "delete": "Xóa",
+    "deleteNotify": "Không được xóa người dùng này."
   },
 
   "updateUserContainer": {
@@ -102,6 +103,7 @@
     "apply": "Đồng ý",
     "cancel": "Hủy",
     "message": "Bạn có chắc chắn muốn xóa người dùng này không?",
-    "title": "Xóa người dùng"
+    "title": "Xóa người dùng",
+    "warning": "Cảnh báo!!"
   }
 }

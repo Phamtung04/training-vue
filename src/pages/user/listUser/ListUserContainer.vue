@@ -1,5 +1,5 @@
 <template>
-  <v-form class="flex items-center mt-10">
+  <v-form class="flex items-center mt-10 mb-5">
     <CustomTextField
       class="ml-2"
       name="searchUserName"
@@ -58,6 +58,7 @@
     @update-items-per-page="handleUpdateItemsPerPage"
     @sort="handleSort"
     @handle-update="handleUpdate"
+    :userToken="userToken"
   />
 
   <UpdateUserContainer
@@ -150,7 +151,7 @@ const totalPages = computed(() =>
 
 const displayedUsers = computed(() =>
   users.value
-    .filter((users) => users._id !== userToken?._id)
+    // .filter((users) => users._id !== userToken?._id)
     .map((user) => ({
       ...user,
       dob: formatDate(user.dob),

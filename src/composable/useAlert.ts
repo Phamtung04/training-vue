@@ -21,6 +21,14 @@ export const useAlert = () => {
     })
   }
 
+  const warning = (message: string) => {
+    Swal.fire({
+      icon: 'warning',
+      title: t('actionContainer.warning'),
+      text: message,
+    })
+  }
+
   const confirm = async (message: string) => {
     const result = await Swal.fire({
       title: t('actionContainer.confirm'),
@@ -37,5 +45,6 @@ export const useAlert = () => {
     successNotify,
     errorNotify,
     confirm,
+    warning,
   }
 }
